@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لعبة مصنف الأطعمة - نسخة متطورة</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --secondary: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(239, 68, 68, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgMove 15s ease-in-out infinite;
+    }
+    
+    @keyframes bgMove {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--danger));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3)); }
+      50% { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.6)); }
+    }
+    
+    .stats-container {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 20px;
+      min-width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .control-btn {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      border-radius: 16px;
+      padding: 12px 24px;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+    
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      border-color: var(--purple);
+    }
+    
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      transition: width 0.5s ease;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .category-zone {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 3px dashed var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      min-height: 300px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-zone::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      animation: zonePulse 3s infinite;
+    }
+    
+    @keyframes zonePulse {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
+    }
+    
+    .category-zone.healthy {
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+    
+    .category-zone.unhealthy {
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+    
+    .category-zone.drag-over {
+      border-style: solid;
+      transform: scale(1.02);
+      box-shadow: 0 12px 40px rgba(16, 185, 129, 0.3);
+    }
+    
+    .category-zone.healthy.drag-over {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.1));
+      border-color: var(--primary);
+    }
+    
+    .category-zone.unhealthy.drag-over {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+      border-color: var(--danger);
+    }
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--card-border);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .category-icon {
+      font-size: 36px;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .category-title {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    
+    .category-count {
+      margin-right: auto;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    
+    .category-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .food-tray {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    
+    .tray-header {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .tray-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .food-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      padding: 12px 20px;
+      border-radius: 999px;
+      cursor: grab;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 16px;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .food-item::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    
+    .food-item:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .food-item:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+      border-color: var(--purple);
+    }
+    
+    .food-item:active {
+      cursor: grabbing;
+      transform: scale(0.95);
+    }
+    
+    .food-item.dragging {
+      opacity: 0.5;
+      transform: scale(0.9);
+    }
+    
+    .food-emoji {
+      font-size: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .food-name {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .placed-item {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.1));
+      border-color: var(--primary);
+      cursor: default;
+      animation: placeItem 0.5s ease-out;
+    }
+    
+    @keyframes placeItem {
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+      }
+      60% {
+        transform: scale(1.1) rotate(10deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+    }
+    
+    .placed-item.unhealthy-placed {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+      border-color: var(--danger);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: modalSlideUp 0.4s ease-out;
+      text-align: center;
+    }
+    
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .modal-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: iconRotate 1s ease-out;
+    }
+    
+    @keyframes iconRotate {
+      0% { transform: scale(0) rotate(-180deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+    
+    .modal-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .modal-message {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .modal-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .modal-stat {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    
+    .modal-stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    
+    .modal-stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      margin: 8px;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 8px;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .feedback-toast {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: linear-gradient(135deg, var(--success), var(--primary));
+      color: white;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+    
+    .feedback-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .feedback-toast.error {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .header {
+        padding: 16px;
+      }
+      
+      .logo {
+        font-size: 20px;
+      }
+      
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .category-zone {
+        min-height: 200px;
+      }
+      
+      .food-item {
+        font-size: 14px;
+        padding: 10px 16px;
+      }
+      
+      .food-emoji {
+        font-size: 20px;
+      }
+      
+      .modal-content {
+        padding: 24px;
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../games.html" class="back-button">العودة إلى قائمة الألعاب</a>
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span>🎯</span>
+          <span>مصنف الأطعمة الذكي</span>
+        </div>
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-label">متبقي</div>
+            <div class="stat-value" id="remainingCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">صحيحة</div>
+            <div class="stat-value" id="correctCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">أخطاء</div>
+            <div class="stat-value" id="mistakesCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">النقاط</div>
+            <div class="stat-value" id="scoreCount">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" id="btnRestart">🔄 إعادة اللعبة</button>
+      <button class="control-btn" id="btnHint">💡 تلميح</button>
+    </div>
+
+    <div class="categories-grid">
+      <div class="category-zone healthy" id="healthyZone">
+        <div class="category-header">
+          <span class="category-icon">✅</span>
+          <span class="category-title">أطعمة صحية</span>
+          <span class="category-count" id="healthyCount">0</span>
+        </div>
+        <div class="category-items" id="healthyItems"></div>
+      </div>
+
+      <div class="category-zone unhealthy" id="unhealthyZone">
+        <div class="category-header">
+          <span class="category-icon">❌</span>
+          <span class="category-title">أطعمة غير صحية</span>
+          <span class="category-count" id="unhealthyCount">0</span>
+        </div>
+        <div class="category-items" id="unhealthyItems"></div>
+      </div>
+    </div>
+
+    <div class="food-tray">
+      <div class="tray-header">
+        <span>🍽️</span>
+        <span>اسحب الأطعمة للفئة المناسبة</span>
+      </div>
+      <div class="tray-items" id="trayItems"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="gameModal">
+    <div class="modal-content">
+      <div class="modal-icon" id="modalIcon">🎉</div>
+      <div class="modal-title" id="modalTitle">أحسنت!</div>
+      <div class="modal-message" id="modalMessage"></div>
+      
+      <div class="modal-stats" id="modalStats"></div>
+      
+      <div>
+        <button class="btn-primary" onclick="restartGame()">🔄 لعب مرة أخرى</button>
+        <button class="btn-secondary" onclick="closeModal()">✓ حسناً</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback-toast" id="feedbackToast"></div>
+
+  <script>
+    const FOODS = [
+      {name: 'تفاح', healthy: true, emoji: '🍎'},
+      {name: 'موز', healthy: true, emoji: '🍌'},
+      {name: 'سلطة خضراء', healthy: true, emoji: '🥗'},
+      {name: 'جزر', healthy: true, emoji: '🥕'},
+      {name: 'بروكلي', healthy: true, emoji: '🥦'},
+      {name: 'سمك مشوي', healthy: true, emoji: '🐟'},
+      {name: 'خبز كامل', healthy: true, emoji: '🍞'},
+      {name: 'زبادي', healthy: true, emoji: '🥛'},
+      {name: 'أفوكادو', healthy: true, emoji: '🥑'},
+      {name: 'مكسرات', healthy: true, emoji: '🥜'},
+      {name: 'برتقال', healthy: true, emoji: '🍊'},
+      {name: 'فراولة', healthy: true, emoji: '🍓'},
+      {name: 'همبرغر', healthy: false, emoji: '🍔'},
+      {name: 'بطاطس مقلية', healthy: false, emoji: '🍟'},
+      {name: 'مشروب غازي', healthy: false, emoji: '🥤'},
+      {name: 'دونتس', healthy: false, emoji: '🍩'},
+      {name: 'بيتزا', healthy: false, emoji: '🍕'},
+      {name: 'آيس كريم', healthy: false, emoji: '🍦'},
+      {name: 'شوكولاتة', healthy: false, emoji: '🍫'},
+      {name: 'حلوى', healthy: false, emoji: '🍬'}
+    ];
+
+    let gameState = {
+      foods: [],
+      remaining: 0,
+      correct: 0,
+      mistakes: 0,
+      score: 0,
+      healthyPlaced: 0,
+      unhealthyPlaced: 0,
+      hintsUsed: 0,
+      startTime: null
+    };
+
+    let draggedItem = null;
+
+    function initGame() {
+      // Select 16 random foods
+      gameState.foods = shuffleArray([...FOODS])
+        .slice(0, 16)
+        .map((food, index) => ({
+          ...food,
+          id: index,
+          placed: false
+        }));
+      
+      gameState.remaining = gameState.foods.length;
+      gameState.correct = 0;
+      gameState.mistakes = 0;
+      gameState.score = 0;
+      gameState.healthyPlaced = 0;
+      gameState.unhealthyPlaced = 0;
+      gameState.hintsUsed = 0;
+      gameState.startTime = Date.now();
+      
+      renderTray();
+      updateStats();
+      clearCategories();
+    }
+
+    function renderTray() {
+      const tray = document.getElementById('trayItems');
+      const unplacedFoods = gameState.foods.filter(f => !f.placed);
+      
+      tray.innerHTML = unplacedFoods.map(food => `
+        <div class="food-item" draggable="true" data-id="${food.id}">
+          <span class="food-emoji">${food.emoji}</span>
+          <span class="food-name">${food.name}</span>
+        </div>
+      `).join('');
+      
+      // Add drag event listeners
+      tray.querySelectorAll('.food-item').forEach(item => {
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragend', handleDragEnd);
+      });
+    }
+
+    function clearCategories() {
+      document.getElementById('healthyItems').innerHTML = '';
+      document.getElementById('unhealthyItems').innerHTML = '';
+    }
+
+    function handleDragStart(e) {
+      draggedItem = parseInt(e.target.dataset.id);
+      e.target.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDragEnter(e) {
+      const zone = e.currentTarget;
+      if (zone.classList.contains('category-zone')) {
+        zone.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave(e) {
+      const zone = e.currentTarget;
+      if (zone.classList.contains('category-zone')) {
+        zone.classList.remove('drag-over');
+      }
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const zone = e.currentTarget;
+      zone.classList.remove('drag-over');
+      
+      if (draggedItem === null) return;
+      
+      const food = gameState.foods.find(f => f.id === draggedItem);
+      if (!food || food.placed) return;
+      
+      const isHealthyZone = zone.id === 'healthyZone';
+      placeFood(food, isHealthyZone);
+      
+      draggedItem = null;
+    }
+
+    function placeFood(food, inHealthyZone) {
+      const isCorrect = food.healthy === inHealthyZone;
+      
+      if (isCorrect) {
+        food.placed = true;
+        gameState.remaining--;
+        gameState.correct++;
+        gameState.score += 100;
+        
+        if (inHealthyZone) {
+          gameState.healthyPlaced++;
+        } else {
+          gameState.unhealthyPlaced++;
+        }
+        
+        // Add to category
+        const container = inHealthyZone ? 
+          document.getElementById('healthyItems') : 
+          document.getElementById('unhealthyItems');
+        
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `food-item placed-item ${inHealthyZone ? '' : 'unhealthy-placed'}`;
+        itemDiv.innerHTML = `
+          <span class="food-emoji">${food.emoji}</span>
+          <span class="food-name">${food.name}</span>
+        `;
+        container.appendChild(itemDiv);
+        
+        showFeedback(`✅ ممتاز! ${food.name} ${inHealthyZone ? 'صحي' : 'غير صحي'} فعلاً`, 'success');
+        
+        // Check if game is won
+        if (gameState.remaining === 0) {
+          setTimeout(gameWon, 800);
+        }
+      } else {
+        gameState.mistakes++;
+        gameState.score = Math.max(0, gameState.score - 20);
+        showFeedback(`❌ خطأ! ${food.name} ليس ${inHealthyZone ? 'صحي' : 'غير صحي'}`, 'error');
+      }
+      
+      renderTray();
+      updateStats();
+    }
+
+    function updateStats() {
+      const remainingEl = document.getElementById('remainingCount');
+      const correctEl = document.getElementById('correctCount');
+      const mistakesEl = document.getElementById('mistakesCount');
+      const scoreEl = document.getElementById('scoreCount');
+      const healthyCountEl = document.getElementById('healthyCount');
+      const unhealthyCountEl = document.getElementById('unhealthyCount');
+      const progressEl = document.getElementById('progressFill');
+      
+      if (remainingEl) remainingEl.textContent = gameState.remaining;
+      if (correctEl) correctEl.textContent = gameState.correct;
+      if (mistakesEl) mistakesEl.textContent = gameState.mistakes;
+      if (scoreEl) scoreEl.textContent = gameState.score;
+      if (healthyCountEl) healthyCountEl.textContent = gameState.healthyPlaced;
+      if (unhealthyCountEl) unhealthyCountEl.textContent = gameState.unhealthyPlaced;
+      
+      if (progressEl) {
+        const total = gameState.foods.length;
+        const progress = ((total - gameState.remaining) / total) * 100;
+        progressEl.style.width = progress + '%';
+      }
+    }
+
+    function showFeedback(message, type) {
+      const toast = document.getElementById('feedbackToast');
+      if (!toast) return;
+      
+      toast.textContent = message;
+      toast.className = 'feedback-toast show ' + type;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function useHint() {
+      const unplacedFoods = gameState.foods.filter(f => !f.placed);
+      if (unplacedFoods.length === 0) {
+        showFeedback('لا توجد أطعمة متبقية!', 'error');
+        return;
+      }
+      
+      gameState.hintsUsed++;
+      gameState.score = Math.max(0, gameState.score - 30);
+      
+      const randomFood = unplacedFoods[Math.floor(Math.random() * unplacedFoods.length)];
+      const hint = randomFood.healthy ? 
+        `💡 ${randomFood.name} ${randomFood.emoji} طعام صحي - ضعه في الفئة الخضراء` :
+        `💡 ${randomFood.name} ${randomFood.emoji} طعام غير صحي - ضعه في الفئة الحمراء`;
+      
+      showFeedback(hint, 'success');
+      updateStats();
+    }
+
+    function gameWon() {
+      const timeTaken = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const accuracy = Math.round((gameState.correct / gameState.foods.length) * 100);
+      
+      // Time bonus
+      if (timeTaken < 60) {
+        gameState.score += 200;
+      } else if (timeTaken < 120) {
+        gameState.score += 100;
+      }
+      
+      // Perfect game bonus
+      if (gameState.mistakes === 0) {
+        gameState.score += 500;
+      }
+      
+      const grade = gameState.mistakes === 0 ? '🏆 مثالي' :
+                    gameState.mistakes <= 2 ? '⭐ ممتاز' :
+                    gameState.mistakes <= 5 ? '👍 جيد جداً' : '📚 جيد';
+      
+      showModal(
+        '🎉',
+        'مبروك! أكملت التصنيف',
+        `أحسنت في تصنيف الأطعمة الصحية وغير الصحية!\n${grade}`,
+        [
+          {label: 'النقاط النهائية', value: gameState.score},
+          {label: 'إجابات صحيحة', value: gameState.correct},
+          {label: 'الأخطاء', value: gameState.mistakes},
+          {label: 'الدقة', value: `${accuracy}%`},
+          {label: 'الوقت', value: `${timeTaken}ث`},
+          {label: 'التلميحات', value: gameState.hintsUsed}
+        ]
+      );
+    }
+
+    function showModal(icon, title, message, stats) {
+      const modal = document.getElementById('gameModal');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalStats = document.getElementById('modalStats');
+      
+      if (modalIcon) modalIcon.textContent = icon;
+      if (modalTitle) modalTitle.textContent = title;
+      if (modalMessage) modalMessage.textContent = message;
+      
+      if (modalStats) {
+        modalStats.innerHTML = stats.map(stat => `
+          <div class="modal-stat">
+            <div class="modal-stat-value">${stat.value}</div>
+            <div class="modal-stat-label">${stat.label}</div>
+          </div>
+        `).join('');
+      }
+      
+      if (modal) modal.classList.add('show');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('gameModal');
+      if (modal) modal.classList.remove('show');
+    }
+
+    function restartGame() {
+      closeModal();
+      initGame();
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Setup drag zones
+    const healthyZone = document.getElementById('healthyZone');
+    const unhealthyZone = document.getElementById('unhealthyZone');
+
+    [healthyZone, unhealthyZone].forEach(zone => {
+      zone.addEventListener('dragover', handleDragOver);
+      zone.addEventListener('dragenter', handleDragEnter);
+      zone.addEventListener('dragleave', handleDragLeave);
+      zone.addEventListener('drop', handleDrop);
+    });
+
+    // Button event listeners
+    document.getElementById('btnRestart').addEventListener('click', restartGame);
+    document.getElementById('btnHint').addEventListener('click', useHint);
+
+    // Initialize game
+    initGame();
+  </script>
+</body>
+</html>
+

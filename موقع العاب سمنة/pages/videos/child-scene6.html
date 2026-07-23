@@ -1,0 +1,1188 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فوائد الرياضة والطبخ الصحي - قسم الطفل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .floating-icons {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.15;
+            animation: floatAround 20s linear infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 15px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .video-header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="kitchen" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12.5" cy="12.5" r="1.5" fill="rgba(255,255,255,0.1)"/><rect x="10" y="10" width="5" height="5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23kitchen)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .video-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .video-subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        .floating-kitchen-items {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .kitchen-item {
+            position: absolute;
+            font-size: 2.5em;
+            opacity: 0.4;
+            animation: kitchenFloat 8s ease-in-out infinite;
+        }
+
+        .kitchen-item:nth-child(1) { top: 15%; right: 15%; animation-delay: 0s; }
+        .kitchen-item:nth-child(2) { top: 70%; right: 85%; animation-delay: 2s; }
+        .kitchen-item:nth-child(3) { top: 85%; right: 25%; animation-delay: 4s; }
+        .kitchen-item:nth-child(4) { top: 25%; right: 75%; animation-delay: 6s; }
+        .kitchen-item:nth-child(5) { top: 50%; right: 10%; animation-delay: 1s; }
+
+        .video-container {
+            position: relative;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .video-description {
+            padding: 40px;
+            background: white;
+        }
+
+        .description-title {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .description-content {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .cooking-section {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border: 3px solid #FF9800;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cooking-section::before {
+            content: '👩‍🍳';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 5em;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .cooking-section h3 {
+            color: #E65100;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+        }
+
+        .pizza-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .pizza-card {
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .pizza-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .unhealthy-pizza {
+            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+            border: 3px solid #f44336;
+        }
+
+        .healthy-pizza {
+            background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+            border: 3px solid #4CAF50;
+        }
+
+        .pizza-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .unhealthy-pizza .pizza-header {
+            color: #d32f2f;
+        }
+
+        .healthy-pizza .pizza-header {
+            color: #2E7D32;
+        }
+
+        .ingredient-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .ingredient-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ingredient-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ingredient-emoji {
+            font-size: 2em;
+        }
+
+        .ingredient-info {
+            flex: 1;
+        }
+
+        .ingredient-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+
+        .ingredient-benefit {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .sports-benefits {
+            background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);
+            border: 3px solid #3F51B5;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .sports-benefits::before {
+            content: '🏃‍♂️';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 4em;
+            opacity: 0.15;
+            transform: rotate(-15deg);
+        }
+
+        .sports-benefits h3 {
+            color: #283593;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(63, 81, 181, 0.2);
+        }
+
+        .benefit-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .benefit-title {
+            font-weight: bold;
+            color: #283593;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .benefit-desc {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .sedentary-activities {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+            border: 3px solid #FFA726;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .sedentary-activities::before {
+            content: '📱';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 4em;
+            opacity: 0.1;
+        }
+
+        .sedentary-activities h3 {
+            color: #E65100;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .activity-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 167, 38, 0.2);
+        }
+
+        .activity-emoji {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .activity-name {
+            color: #E65100;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .dialogue-section {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            border: 3px solid #AB47BC;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .dialogue-section h3 {
+            color: #6A1B9A;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+        }
+
+        .dialogue-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-right: 70px;
+            transition: all 0.3s ease;
+        }
+
+        .dialogue-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(171, 71, 188, 0.2);
+        }
+
+        .dialogue-character {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2.2em;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #6A1B9A;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .character-speech {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 25px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1);
+            width: 77.8%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            animation: progressShimmer 3s ease-in-out infinite;
+        }
+
+        .navigation-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 35px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .scene-info {
+            text-align: center;
+            color: #666;
+        }
+
+        .completion-badge {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes kitchenFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(90deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+            75% { transform: translateY(-15px) rotate(270deg); }
+        }
+
+        @keyframes floatAround {
+            0% { 
+                transform: translateX(0) translateY(0) rotate(0deg); 
+            }
+            25% { 
+                transform: translateX(100px) translateY(-50px) rotate(90deg); 
+            }
+            50% { 
+                transform: translateX(50px) translateY(-100px) rotate(180deg); 
+            }
+            75% { 
+                transform: translateX(-50px) translateY(-50px) rotate(270deg); 
+            }
+            100% { 
+                transform: translateX(0) translateY(0) rotate(360deg); 
+            }
+        }
+
+        @keyframes progressShimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                padding: 20px;
+            }
+
+            .video-placeholder {
+                height: 300px;
+            }
+
+            .video-title {
+                font-size: 1.6em;
+            }
+
+            .pizza-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .activities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navigation-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-icons">
+        <div class="floating-icon" style="top: 10%; left: 10%;">🍕</div>
+        <div class="floating-icon" style="top: 20%; left: 80%;">🏃‍♂️</div>
+        <div class="floating-icon" style="top: 70%; left: 15%;">👩‍🍳</div>
+        <div class="floating-icon" style="top: 60%; left: 75%;">💪</div>
+        <div class="floating-icon" style="top: 85%; left: 45%;">🥗</div>
+        <div class="floating-icon" style="top: 30%; left: 60%;">❤️</div>
+        <div class="floating-icon" style="top: 45%; left: 25%;">📱</div>
+        <div class="floating-icon" style="top: 75%; left: 90%;">🧠</div>
+    </div>
+
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">🍕 فوائد الرياضة والطبخ الصحي - قسم الطفل</div>
+            <div class="nav-links">
+                <a href="child.html">🔙 قائمة المشاهد</a>
+                <a href="../videos/videos.html">🎥 قسم الفيديوهات</a>
+                <a href="../main/home.html">🏠 الرئيسية</a>
+            </div>
+        </nav>
+
+        <div class="video-section">
+            <div class="video-header">
+                <div class="floating-kitchen-items">
+                    <div class="kitchen-item">👩‍🍳</div>
+                    <div class="kitchen-item">🍕</div>
+                    <div class="kitchen-item">🏃‍♂️</div>
+                    <div class="kitchen-item">💪</div>
+                    <div class="kitchen-item">❤️</div>
+                </div>
+                <h1 class="video-title">🍕 المشهد السادس - في المطبخ مع ماما</h1>
+                <p class="video-subtitle">محمد يتعلم كيفية طبخ البيتزا بطريقة صحية ويكتشف الفوائد المذهلة للرياضة والأنشطة بسيطة!</p>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <!-- يتم استبدال src بالرابط الفعلي للفيديو -->
+                    <iframe class="video-iframe" 
+                            src="https://drive.google.com/file/d/1NHBMMc6W4xv4DIk4vdwE6BqUfqat43ME/preview"
+                            allow="autoplay">
+                    </iframe>
+                    <div class="video-loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري تحميل فيديو المطبخ الصحي...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-description">
+ 
+
+                <h2 class="description-title">
+                    <span>👩‍🍳</span>
+                    في المطبخ: تعلم الطبخ الصحي واكتشاف فوائد الرياضة المذهلة!
+                </h2>
+                <p class="description-content">
+                    في هذا المشهد الرائع، ندخل المطبخ مع محمد ووالدته لنتعلم كيفية تحويل الوجبات المفضلة لدينا إلى وجبات صحية ولذيذة! ستتعلم كيف تصنع أم محمد البيتزا بطريقة صحية باستخدام مكونات طبيعية، وستكتشف الفوائد المتعددة للرياضة التي تتجاوز مجرد إنقاص الوزن، بالإضافة إلى فهم الأنشطة بسيطة وتأثيرها.
+                </p>
+
+                <div class="cooking-section">
+                    <h3>
+                        <span>🍕</span>
+                        مقارنة البيتزا: التقليدية مقابل الصحية
+                    </h3>
+                    <div class="pizza-comparison">
+                        <div class="pizza-card unhealthy-pizza">
+                            <div class="pizza-header">
+                                <span>🍕</span>
+                                البيتزا التقليدية (غير صحية)
+                            </div>
+                            <div class="ingredient-list">
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🌾</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">دقيق القمح الأبيض</div>
+                                        <div class="ingredient-benefit">معالج وفقير بالألياف، يسبب ارتفاع سكر الدم</div>
+                                    </div>
+                                </div>
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🧀</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">جبنة مصنعة</div>
+                                        <div class="ingredient-benefit">عالية الدهون المشبعة والصوديوم</div>
+                                    </div>
+                                </div>
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🥓</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">لحوم مصنعة</div>
+                                        <div class="ingredient-benefit">تحتوي على مواد حافظة ضارة</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pizza-card healthy-pizza">
+                            <div class="pizza-header">
+                                <span>🍕</span>
+                                بيتزا ماما الصحية
+                            </div>
+                            <div class="ingredient-list">
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🌾</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">مكرونة من الشوفان</div>
+                                        <div class="ingredient-benefit">غنية بالألياف والبروتين، تشعر بالشبع لفترة أطول</div>
+                                    </div>
+                                </div>
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🍅</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">طماطم وبصل وفلفل طازج</div>
+                                        <div class="ingredient-benefit">مليئة بالفيتامينات ومضادات الأكسدة</div>
+                                    </div>
+                                </div>
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🫒</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">زيتون طبيعي</div>
+                                        <div class="ingredient-benefit">دهون صحية مفيدة للقلب والدماغ</div>
+                                    </div>
+                                </div>
+                                <div class="ingredient-item">
+                                    <span class="ingredient-emoji">🍗</span>
+                                    <div class="ingredient-info">
+                                        <div class="ingredient-name">صدر فرخة مسلوق</div>
+                                        <div class="ingredient-benefit">بروتين عالي الجودة وقليل الدهون</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; color: #E65100; font-weight: bold; background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px;">
+                        💡 بيتزا ماما الصحية ألذ وأفضل - كما وعدت محمد! 🍕✨
+                    </div>
+                </div>
+
+                <div class="sports-benefits">
+                    <h3>
+                        <span>🏃‍♂️</span>
+                        الفوائد المذهلة للرياضة (أكثر من مجرد إنقاص الوزن!)
+                    </h3>
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <span class="benefit-icon">🛡️</span>
+                            <div class="benefit-title">تقليل خطر الأمراض</div>
+                            <div class="benefit-desc">تحمي من أمراض القلب والسكري وتقوي جهاز المناعة</div>
+                        </div>
+                        <div class="benefit-card">
+                            <span class="benefit-icon">❤️</span>
+                            <div class="benefit-title">تحسين الدورة الدموية</div>
+                            <div class="benefit-desc">تساعد على تدفق الدم في الشرايين والأوردة بسهولة</div>
+                        </div>
+                        <div class="benefit-card">
+                            <span class="benefit-icon">😊</span>
+                            <div class="benefit-title">الشعور بالسعادة</div>
+                            <div class="benefit-desc">تفرز هرمونات السعادة وتحسن المزاج والثقة بالنفس</div>
+                        </div>
+                        <div class="benefit-card">
+                            <span class="benefit-icon">🌙</span>
+                            <div class="benefit-title">تحسين النوم</div>
+                            <div class="benefit-desc">تقلل الأرق وتساعد على نوم هادئ وعميق</div>
+                        </div>
+                        <div class="benefit-card">
+                            <span class="benefit-icon">🧠</span>
+                            <div class="benefit-title">تقوية الذاكرة</div>
+                            <div class="benefit-desc">تحسن التركيز والانتباه والأداء الدراسي</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sedentary-activities">
+                    <h3>
+                        <span>📱</span>
+                        الأنشطة بسيطة - ما هي وما تأثيرها؟
+                    </h3>
+                    <p style="margin-bottom: 25px; color: #E65100; font-size: 1.05em; line-height: 1.6;">
+                        الأنشطة بسيطة هي الأنشطة التي نقوم بها وهي جالسين أو مستلقين لفترات طويلة بدون حركة كثيرة:
+                    </p>
+                    <div class="activities-grid">
+                        <div class="activity-item">
+                            <span class="activity-emoji">📺</span>
+                            <div class="activity-name">مشاهدة التلفزيون</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">🎮</span>
+                            <div class="activity-name">ألعاب الفيديو</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">💻</span>
+                            <div class="activity-name">استخدام الكمبيوتر</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">📱</span>
+                            <div class="activity-name">اللعب بالتلفون</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">📖</span>
+                            <div class="activity-name">القراءة لفترة طويلة</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">🃏</span>
+                            <div class="activity-name">لعب الكوتشينة</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">🚗</span>
+                            <div class="activity-name">قيادة السيارة</div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-emoji">🪑</span>
+                            <div class="activity-name">الجلوس في المدرسة/العمل</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; color: #E65100; font-weight: bold; background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px;">
+                        ⚖️ المطلوب التوازن: وقت للأنشطة المستقرة ووقت للحركة والرياضة! 
+                    </div>
+                </div>
+
+                <div class="dialogue-section">
+                    <h3>
+                        <span>💬</span>
+                        أهم محادثات المطبخ التعليمية
+                    </h3>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">ماما عاملة إيه أكل النهاردة؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👩</div>
+                        <div class="character-name">الأم:</div>
+                        <div class="character-speech">بيتزا يا محمد!</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">الله أنا بحب البيتزا يا ماما، بس مش احنا اتفقنا مش هاكل الحاجات دي تاني عشان وزني زايد؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👩</div>
+                        <div class="character-name">الأم:</div>
+                        <div class="character-speech">ماهو يا حبيبي أنا مش هحرمك إنك تاكل بيتزا أو برجر، بس هنعمله بطريقة صحية زي ما علمتك</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">عندي سؤالين: الأول هتعملي البيتزا صحية إزاي؟ والتاني إيه أهمية الرياضة غير إنها بتخسس؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👩</div>
+                        <div class="character-name">الأم:</div>
+                        <div class="character-speech">هعملها بمكرونة من الشوفان بدل دقيق القمح، وطماطم وبصل وفلفل وزيتون وصدر فرخة مسلوق</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👩</div>
+                        <div class="character-name">الأم:</div>
+                        <div class="character-speech">الرياضة بتساعدنا على حرق السعرات الحرارية وتقليل خطر الأمراض وتدفق الدم في الشرايين والأوردة، وبرضو بتساعدنا على الشعور بالسعادة وتقليل الأرق وتحسين النوم</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">سمعت الأستاذ في المدرسة بيتكلم عن الأنشطة بسيطة، إيه هي؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👩</div>
+                        <div class="character-name">الأم:</div>
+                        <div class="character-speech">الأنشطة بسيطة دي أنشطة خفيفة زي مشاهدة التلفزيون أو ألعاب الفيديو أو الجلوس قدام الكمبيوتر، وممكن تكون أنشطة أخرى زي القراءة أو لعب الكوتشينة أو القعدة على المكتب</div>
+                    </div>
+                </div>
+
+  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9em;">
+                    المشهد 6 من 9 | التقدم: 77.8% 🌟
+                </p>
+            </div>
+
+            <div class="navigation-section">
+                <a href="child-scene4.html" class="nav-btn">
+                    <span>⏮️</span>
+                    المشهد السابق
+                </a>
+                <div class="scene-info">
+                    <strong>🍱 المشهد الحالي: مقارنة الوجبات الصحية</strong>
+                    <br>
+                    <small>مدة المشاهدة: 10 دقائق من التعلم التفاعلي المفيد!</small>
+                </div>
+                <a href="child-scene7.html" class="nav-btn">
+                    <span>المشهد التالي</span>
+                    <span>⏭️</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoIframe = document.querySelector('.video-iframe');
+            const loadingDiv = document.querySelector('.video-loading');
+
+            // إخفاء مؤشر التحميل عند تحميل الفيديو
+            videoIframe.addEventListener('load', function() {
+                loadingDiv.style.display = 'none';
+            });
+
+            // تتبع وقت المشاهدة
+            let watchTime = 0;
+            const watchInterval = setInterval(() => {
+                watchTime += 1;
+                
+            }, 1000);
+
+            // إيقاف التتبع عند مغادرة الصفحة
+            window.addEventListener('beforeunload', function() {
+                clearInterval(watchInterval);
+                
+            });
+
+            // تأثيرات تفاعلية للمكونات
+            document.querySelectorAll('.ingredient-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                });
+
+                item.addEventListener('click', function() {
+                    this.style.animation = 'ingredientPulse 0.6s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 600);
+                });
+            });
+
+            // تأثيرات تفاعلية لفوائد الرياضة
+            document.querySelectorAll('.benefit-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.animation = 'benefitGlow 0.8s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 800);
+                });
+            });
+
+            // تأثيرات تفاعلية للأنشطة المستقرة
+            document.querySelectorAll('.activity-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.05)';
+                    this.style.background = 'rgba(255, 255, 255, 1)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.background = 'rgba(255, 255, 255, 0.9)';
+                });
+
+                item.addEventListener('click', function() {
+                    this.style.animation = 'activityBounce 0.5s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 500);
+                });
+            });
+
+            // تأثيرات الحوار
+            document.querySelectorAll('.dialogue-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.animation = 'dialogueHighlight 0.6s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 600);
+                });
+            });
+
+            // إضافة عناصر المطبخ المتحركة
+            createKitchenElements();
+
+            // إضافة تأثير الاكتمال
+            setTimeout(() => {
+                showCompletionEffect();
+            }, 2000);
+        });
+
+        function createKitchenElements() {
+            const kitchenItems = ['🍕', '👩‍🍳', '🥗', '🍅', '🫒', '🍗', '🌾', '❤️', '💪', '😊'];
+            
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    const item = document.createElement('div');
+                    const kitchenItem = kitchenItems[Math.floor(Math.random() * kitchenItems.length)];
+                    
+                    item.style.cssText = `
+                        position: fixed;
+                        font-size: ${Math.random() * 40 + 30}px;
+                        pointer-events: none;
+                        top: ${Math.random() * 100}vh;
+                        right: ${Math.random() * 100}vw;
+                        opacity: 0.7;
+                        animation: kitchenMagic 8s ease-out forwards;
+                        z-index: 1000;
+                    `;
+                    item.textContent = kitchenItem;
+                    
+                    document.body.appendChild(item);
+                    
+                    setTimeout(() => {
+                        item.remove();
+                    }, 8000);
+                }
+            }, 3000);
+        }
+
+        function showCompletionEffect() {
+            // إنشاء تأثير الألعاب النارية للاكتمال
+            const celebrationItems = ['🎉', '🎊', '✨', '🌟', '🎈', '🏆', '👏'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    const celebrationItem = celebrationItems[Math.floor(Math.random() * celebrationItems.length)];
+                    
+                    item.style.cssText = `
+                        position: fixed;
+                        font-size: ${Math.random() * 50 + 40}px;
+                        pointer-events: none;
+                        top: ${Math.random() * 30 + 10}%;
+                        left: ${Math.random() * 80 + 10}%;
+                        opacity: 1;
+                        animation: celebrationExplode 3s ease-out forwards;
+                        z-index: 10000;
+                    `;
+                    item.textContent = celebrationItem;
+                    
+                    document.body.appendChild(item);
+                    
+                    setTimeout(() => {
+                        item.remove();
+                    }, 3000);
+                }, i * 200);
+            }
+        }
+
+        // إضافة الرسوم المتحركة المخصصة
+        const kitchenStyle = document.createElement('style');
+        kitchenStyle.textContent = `
+            @keyframes kitchenMagic {
+                0% { 
+                    transform: translateY(0) rotate(0deg) scale(1); 
+                    opacity: 0.7; 
+                }
+                25% { 
+                    transform: translateY(-60px) rotate(90deg) scale(1.2); 
+                    opacity: 1; 
+                }
+                50% { 
+                    transform: translateY(-120px) rotate(180deg) scale(1.5); 
+                    opacity: 0.8; 
+                }
+                75% { 
+                    transform: translateY(-80px) rotate(270deg) scale(1.2); 
+                    opacity: 0.6; 
+                }
+                100% { 
+                    transform: translateY(-150px) rotate(360deg) scale(0); 
+                    opacity: 0; 
+                }
+            }
+            
+            @keyframes celebrationExplode {
+                0% { 
+                    transform: scale(0) rotate(0deg); 
+                    opacity: 1; 
+                }
+                50% { 
+                    transform: scale(2) rotate(180deg); 
+                    opacity: 0.8; 
+                }
+                100% { 
+                    transform: scale(0.5) rotate(360deg) translateY(-200px); 
+                    opacity: 0; 
+                }
+            }
+            
+            @keyframes ingredientPulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.08); }
+            }
+            
+            @keyframes benefitGlow {
+                0%, 100% { 
+                    background: rgba(255, 255, 255, 0.95); 
+                    transform: scale(1); 
+                }
+                50% { 
+                    background: rgba(255, 255, 255, 1); 
+                    transform: scale(1.05); 
+                    box-shadow: 0 10px 30px rgba(63, 81, 181, 0.3); 
+                }
+            }
+            
+            @keyframes activityBounce {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+            
+            @keyframes dialogueHighlight {
+                0%, 100% { 
+                    background: rgba(255, 255, 255, 0.9); 
+                    transform: translateX(0); 
+                }
+                50% { 
+                    background: rgba(255, 255, 255, 1); 
+                    transform: translateX(8px); 
+                }
+            }
+        `;
+        document.head.appendChild(kitchenStyle);
+    </script>
+</body>
+</html>
+

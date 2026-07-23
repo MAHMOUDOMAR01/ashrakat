@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مركز الألعاب التعليمية للتوعية</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="../../assets/js/config.js" as="script">
+  <link rel="preload" href="../../assets/js/utils.js" as="script">
+  <link rel="preload" href="../../assets/js/navbar.js" as="script">
+  
+  <link rel="stylesheet" href="../../assets/css/navbar.css">
+  <style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* إزالة التسطير الافتراضي للروابط في الصفحة */
+a { text-decoration: none; }
+a:hover, a:active, a:focus { text-decoration: none; }
+
+/* Daily Challenge */
+.daily-challenge { 
+  background: var(--card); 
+  backdrop-filter: blur(20px); 
+  border:1px solid rgba(255,255,255,.2); 
+  border-radius:22px; 
+  padding:22px; 
+  margin: 22px 0 34px; 
+}
+.daily-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.daily-title { font-size:1.4rem; font-weight:800; }
+.daily-meta { display:flex; gap:8px; flex-wrap:wrap; }
+.streak-pill { background: rgba(255,255,255,.2); padding:8px 12px; border-radius:999px; font-weight:700; }
+.daily-body { display:grid; gap:12px; grid-template-columns: 1fr auto; align-items:center; margin-top:12px; }
+.daily-desc { color: var(--muted); }
+.daily-btn { background: var(--accent); color:#fff; border:none; padding:10px 18px; border-radius:16px; font-weight:800; cursor:pointer; transition:.25s; }
+.daily-btn:hover { transform: translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.25); }
+.daily-done { background: linear-gradient(45deg,#4CAF50,#45a049); }
+
+:root {
+  --bg1: #4CAF50;
+  --bg2: #45a049;
+  --bg3: #81C784;
+  --card: rgba(255,255,255,.15);
+  --glass: rgba(255,255,255,.1);
+  --text: #f8f9fa;
+  --muted: rgba(255,255,255,.9);
+  --accent: linear-gradient(45deg,#FF5722,#FF7043);
+  --primary: linear-gradient(45deg,#2196F3,#1976D2);
+  --success: linear-gradient(45deg,#4CAF50,#45a049);
+  --danger: linear-gradient(45deg,#F44336,#D32F2F);
+  --heading-color: #ffffff;
+  --subtitle-color: #e0f7fa;
+  --link-color: #ffeb3b;
+  --text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+/* 🎨 ستايل أساسي للصفحة */
+body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  background: #f4f4f4;
+  color: #222;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* 🌑 الوضع الداكن */
+body.dark-mode {
+  background: #121212;
+  color: #eee;
+}
+
+/* Header styles removed - using unified navbar */
+
+/* Navigation styles moved to navbar.css */
+
+/* Main Container */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 140px 20px 40px; /* padding-top للـ navbar */
+  position: relative;
+  z-index: 1;
+}
+
+/* Navigation actions moved to unified navbar */
+
+.nav-item {
+  background: #ff9800;
+  color: #fff;
+  padding: 0.4rem 0.9rem;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.3s;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: #e68900;
+  transform: scale(1.05);
+}
+
+/* 🌙 الوضع الداكن للأزرار */
+body.dark-mode .nav-item {
+  background: #03a9f4;
+}
+
+body.dark-mode .nav-item:hover {
+  background: #0288d1;
+}
+
+body.dark {
+  --bg1: #0f172a;
+  --bg2: #0b1223;
+  --bg3: #1f2937;
+  --card: rgba(255,255,255,.12);
+  --glass: rgba(255,255,255,.06);
+  --text: #f1f5f9;
+  --muted: rgba(241,245,249,.9);
+  --border: rgba(255,255,255,.2);
+  --heading-color: #f8fafc;
+  --subtitle-color: #cbd5e1;
+  --link-color: #38bdf8;
+  --text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+  min-height: 100vh;
+  direction: rtl;
+  overflow-x: hidden;
+  color: var(--text);
+}
+
+/* Header */
+.header {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  padding: 20px 0;
+  position: fixed;
+  width: 100%;
+  top: 0; z-index: 1000;
+}
+.nav-container {
+  max-width: 1200px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center; padding:0 20px;
+}
+.logo { font-size:2rem; font-weight:700; color:var(--text); text-shadow:2px 2px 4px rgba(0,0,0,.3); }
+.nav-actions { display:flex; gap:10px; }
+.nav-item {
+  color: var(--text); text-decoration:none; padding:10px 16px; border-radius:25px;
+  transition: .3s ease; background: var(--glass); border:1px solid rgba(255,255,255,.15);
+}
+.nav-item:hover { background: rgba(255,255,255,.2); transform: translateY(-2px); }
+
+/* Main */
+.main-container { max-width: 1200px; margin:0 auto; padding: 120px 20px 40px; }
+
+.hero { text-align:center; margin-bottom:50px; padding:40px; background: var(--glass);
+  backdrop-filter: blur(20px); border-radius:25px; border:1px solid rgba(255,255,255,.2);
+}
+.hero h1 { font-size:3rem; color:var(--heading-color); margin-bottom:15px; text-shadow:var(--text-shadow); animation: glow 2s ease-in-out infinite alternate; }
+@keyframes glow {
+  from { text-shadow: 2px 2px 4px rgba(0,0,0,.3), 0 0 10px rgba(255,255,255,.5); }
+  to   { text-shadow: 2px 2px 4px rgba(0,0,0,.3), 0 0 20px rgba(255,255,255,.8); }
+}
+table th, table td { border-bottom: 1px solid rgba(255,255,255,.12); }
+table th { color: var(--muted); font-weight:700; }
+.badge input[type="radio"] { margin-inline-end:6px; accent-color: #ff9800; }
+.question-display .stars { font-size:1.3rem; letter-spacing:2px; }
+.category-box.droppable-hover { outline: 3px dashed rgba(255,255,255,.7); transform: scale(1.01); }
+.hint-flash { animation: hintPulse 1s ease-in-out 1; }
+@keyframes hintPulse { 0%{box-shadow:0 0 0 0 rgba(76,175,80,.0);} 50%{box-shadow:0 0 0 8px rgba(76,175,80,.25);} 100%{box-shadow:0 0 0 0 rgba(76,175,80,.0);} }
+.bmi-calculator select { padding:10px; border:none; border-radius:10px; }
+.bmi-calculator .progress { height:12px; }
+/* شريط الوقت في اختبار الرياضة */
+#timerBarEx { transition: width .9s linear; }
+#lsTime + .progress-bar, .progress .progress-bar { transition: width .6s ease; }
+.bmi-calculator .progress, .question-display .progress { height:12px; }
+.question-display table th, .question-display table td { border-bottom:1px solid rgba(255,255,255,.12); padding:6px; }
+#timerBarH { transition: width .9s linear; }
+/* سلاسة شريط الوقت/المقاييس داخل مدرب النوم */
+#slTime + .progress-bar, .question-display .progress .progress-bar { transition: width .6s ease; }
+/* بطاقات السوق */
+#gameContent .question-display > .question-display { border-radius:14px; }
+
+.games-section { margin-bottom:50px; }
+.section-title { font-size:2.2rem; text-align:center; margin-bottom:30px; color:var(--heading-color); text-shadow:var(--text-shadow); }
+.games-grid {
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+  gap: 24px; margin-bottom: 30px;
+}
+.game-card {
+  background: var(--card); backdrop-filter: blur(20px); border-radius:20px;
+  border:1px solid rgba(255,255,255,.2); padding:24px; text-align:center;
+  transition: all .3s cubic-bezier(.4,0,.2,1); cursor:pointer; position:relative; overflow:hidden;
+  color: var(--subtitle-color);
+}
+.game-card::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  transition: left .5s ease;
+}
+.game-card:hover::before { left:100%; }
+.game-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+.game-icon { font-size:3rem; margin-bottom:14px; display:block; }
+.game-card h3 { color: var(--heading-color); margin-bottom: 10px; text-shadow: var(--text-shadow); }
+.game-card p { color: var(--subtitle-color); }
+.game-card a { color: var(--link-color); text-decoration: none; transition: all 0.3s ease; }
+.game-card a:hover { color: #fff; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+.game-title { font-size:1.4rem; margin-bottom:10px; font-weight:700; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.game-description { color: #e0f7fa; font-size:1rem; margin-bottom:16px; line-height:1.6; }
+.play-btn { 
+  background: linear-gradient(45deg, #FF9800, #FF5722); 
+  color:#fff; 
+  border:none; 
+  padding:12px 28px; 
+  border-radius:25px; 
+  font-size:1.1rem; 
+  font-weight:700; 
+  cursor:pointer; 
+  transition:.3s; 
+  box-shadow:0 5px 15px rgba(0,0,0,.2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.play-btn:hover { 
+  transform: translateY(-3px); 
+  box-shadow:0 8px 25px rgba(255,87,34,0.4);
+  background: linear-gradient(45deg, #FF5722, #FF9800);
+}
+
+/* Game Area */
+.game-area { display:none; background: var(--card); backdrop-filter: blur(20px); border-radius:25px; border:1px solid var(--border, rgba(255,255,255,.2)); padding:30px; margin-top:20px; position:relative; }
+.game-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 12px;}
+.back-btn { background: var(--success); color:#fff; border:none; padding:10px 20px; border-radius:25px; font-size:1rem; cursor:pointer; transition:.3s; }
+.back-btn:hover { transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,.2); }
+.game-stats { display:flex; gap:10px; color:var(--text); flex-wrap: wrap; }
+.stat { background: rgba(255,255,255,.2); padding:8px 16px; border-radius:15px; text-align:center; min-width:80px; }
+
+/* Universal progress */
+.progress { height: 10px; background: rgba(255,255,255,.2); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.progress-bar { height:100%; background: linear-gradient(90deg,#4caf50,#ff9800); transition: width .3s ease; }
+
+
+/* Question Display */
+.question-display { background: rgba(255,255,255,.2); padding:24px; border-radius:18px; text-align:center; margin:16px 0; }
+.question-text { font-size:1.4rem; font-weight:700; margin-bottom:20px; line-height:1.5; }
+.options { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:12px; max-width:800px; margin:0 auto; }
+.option-btn { padding:16px; font-size:1rem; border:none; border-radius:14px; background: var(--primary); color:#fff; cursor:pointer; transition:.3s; font-weight:700; text-align:right; line-height:1.4; }
+.option-btn:hover { transform: translateY(-3px); box-shadow:0 8px 15px rgba(0,0,0,.2); }
+.option-btn.correct { background: var(--success); animation: pulse .6s ease; }
+.option-btn.incorrect { background: var(--danger); animation: shake .6s ease; }
+
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+@keyframes shake { 0%,100%{ transform: translateX(0); } 25%{ transform: translateX(-5px); } 75%{ transform: translateX(5px); } }
+
+/* Memory */
+.memory-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; max-width:500px; margin: 16px auto; }
+.memory-card { aspect-ratio:1; background: linear-gradient(45deg,#3498db,#2980b9); border:none; border-radius:14px; font-size:1.3rem; color:#fff; cursor:pointer; transition:.3s; display:flex; align-items:center; justify-content:center; padding:10px; }
+.memory-card:hover { transform: scale(1.05); }
+.memory-card.flipped { background: linear-gradient(45deg,#FF9800,#F57C00); transform: rotateY(180deg); }
+.memory-card.matched { background: var(--success); cursor:default; }
+
+/* Food categorizer */
+.food-categories { display:grid; grid-template-columns: repeat(2,1fr); gap:16px; margin:16px 0; }
+.category-box { background: rgba(255,255,255,.2); border-radius:14px; padding:16px; text-align:center; min-height:140px; border:2px dashed rgba(255,255,255,.5); transition:.3s; }
+.category-box.healthy { border-color:#4CAF50; background: rgba(76,175,80,.2); }
+.category-box.unhealthy { border-color:#F44336; background: rgba(244,67,54,.2); }
+.category-title { font-size:1.2rem; font-weight:700; margin-bottom:8px; }
+.food-items { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:16px 0; }
+.food-item { background: linear-gradient(45deg,#9C27B0,#7B1FA2); color:#fff; border:none; padding:10px 18px; border-radius:25px; cursor:pointer; transition:.3s; font-size:1rem; }
+.food-item:hover { transform: scale(1.07); box-shadow:0 5px 15px rgba(0,0,0,.2); }
+.food-item.dragging { opacity:.5; transform: rotate(5deg); }
+.healthy-food { border:2px solid #4CAF50 !important; }
+.unhealthy-food { border:2px solid #FF5722 !important; }
+
+/* BMI */
+.bmi-calculator { background: rgba(255,255,255,.2); padding:24px; border-radius:18px; margin:16px 0; }
+.input-group { display:flex; align-items:center; gap:12px; margin:12px 0; flex-wrap:wrap; }
+.input-group label { font-weight:700; min-width:120px; }
+.input-group input { padding:10px; border:none; border-radius:10px; font-size:1rem; width:150px; text-align:center; }
+.bmi-result { margin-top:16px; padding:16px; border-radius:14px; text-align:center; font-size:1.1rem; font-weight:700; display:none; }
+.bmi-normal { background: rgba(76,175,80,.3); border:2px solid #4CAF50; }
+.bmi-overweight { background: rgba(255,152,0,.3); border:2px solid #FF9800; }
+.bmi-obese { background: rgba(244,67,54,.3); border:2px solid #F44336; }
+
+.submit-btn { background: linear-gradient(45deg,#FF5722,#E64A19); color:#fff; border:none; padding:12px 22px; border-radius:14px; font-size:1rem; cursor:pointer; transition:.3s; margin:8px; font-weight:700; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,.2); }
+
+.feedback { margin-top:12px; padding:14px; border-radius:14px; text-align:center; font-weight:700; display:none; }
+.feedback.success { background: linear-gradient(45deg, rgba(76,175,80,.2), rgba(69,160,73,.2)); color:#4CAF50; border:2px solid rgba(76,175,80,.5); }
+.feedback.error { background: linear-gradient(45deg, rgba(244,67,54,.2), rgba(211,47,47,.2)); color:#F44336; border:2px solid rgba(244,67,54,.5); }
+/* معلومات عامة (نصائح/تلميحات غير تحذيرية) */
+.feedback.info { background: linear-gradient(45deg, rgba(33,150,243,.18), rgba(25,118,210,.18)); color:#2196F3; border:2px solid rgba(33,150,243,.45); }
+
+/* Badges */
+.badges { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+.badge { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background: rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.25); font-weight:700; font-size:.9rem; }
+.badge .emoji { font-size:1.1rem; }
+
+/* Modal */
+.modal::backdrop { background: rgba(0,0,0,.5); }
+.modal { border:none; border-radius:16px; padding:0; }
+.modal .modal-content { padding:20px 24px; min-width:280px; background: var(--bg2); color:var(--text); border-radius:16px; border: 1px solid rgba(255,255,255,.2); text-align:center; }
+
+ /* Responsive Design */
+ @media (max-width: 1200px) {
+  .games-grid { 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 20px; 
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 0;
+  }
+  
+  .nav-container {
+    padding: 0 15px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .nav-links a {
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-actions { 
+    display: flex; 
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .nav-item {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .main-container {
+    padding: 80px 15px 40px;
+  }
+  
+  .hero {
+    padding: 30px 20px;
+    margin-bottom: 30px;
+  }
+  
+  .hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-stats {
+    font-size: 0.9rem;
+  }
+  
+  .games-grid { 
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+  
+  .game-card {
+    padding: 20px;
+  }
+  
+  .game-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+  
+  .game-title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .game-description {
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+  
+  .play-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .game-area {
+    padding: 20px;
+    margin-top: 15px;
+  }
+  
+  .game-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .back-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+  }
+  
+  .game-stats {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .stat {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    min-width: 70px;
+  }
+  
+  .question-display {
+    padding: 20px;
+    margin: 12px 0;
+  }
+  
+  .question-text {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  
+  .options {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .option-btn {
+    padding: 14px;
+    font-size: 0.9rem;
+  }
+  
+  .memory-grid { 
+    grid-template-columns: repeat(3,1fr); 
+    gap: 8px;
+    max-width: 300px;
+  }
+  
+  .memory-card {
+    font-size: 1.1rem;
+    padding: 8px;
+  }
+  
+  .food-categories { 
+    grid-template-columns: 1fr; 
+    gap: 12px;
+  }
+  
+  .category-box {
+    padding: 12px;
+    min-height: 120px;
+  }
+  
+  .category-title {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  
+  .food-items {
+    gap: 8px;
+    margin: 12px 0;
+  }
+  
+  .food-item {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .bmi-calculator {
+    padding: 20px;
+    margin: 12px 0;
+  }
+  
+  .input-group { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 8px;
+  }
+  
+  .input-group label { 
+    min-width: auto;
+    text-align: center;
+  }
+  
+  .input-group input { 
+    width: 100%; 
+    padding: 12px;
+    font-size: 1rem;
+  }
+  
+  .bmi-result {
+    margin-top: 12px;
+    padding: 12px;
+    font-size: 1rem;
+  }
+  
+  .submit-btn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    margin: 6px;
+  }
+  
+  .feedback {
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .badges {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .badge {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .modal .modal-content {
+    padding: 16px 20px;
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 10px;
+  }
+  
+  .logo {
+    font-size: 1.3rem;
+  }
+  
+  .main-container {
+    padding: 70px 10px 30px;
+  }
+  
+  .hero {
+    padding: 25px 15px;
+  }
+  
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .hero-stats {
+    font-size: 0.8rem;
+  }
+  
+  .game-card {
+    padding: 15px;
+  }
+  
+  .game-icon {
+    font-size: 2rem;
+  }
+  
+  .game-title {
+    font-size: 1.1rem;
+  }
+  
+  .game-description {
+    font-size: 0.85rem;
+  }
+  
+  .play-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .game-area {
+    padding: 15px;
+  }
+  
+  .question-display {
+    padding: 15px;
+  }
+  
+  .question-text {
+    font-size: 1.1rem;
+  }
+  
+  .option-btn {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+  
+  .memory-grid {
+    max-width: 250px;
+    gap: 6px;
+  }
+  
+  .memory-card {
+    font-size: 1rem;
+    padding: 6px;
+  }
+  
+  .category-box {
+    padding: 10px;
+    min-height: 100px;
+  }
+  
+  .food-item {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .bmi-calculator {
+    padding: 15px;
+  }
+  
+  .input-group input {
+    padding: 10px;
+  }
+  
+  .submit-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .stat {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+  
+  .game-card {
+    padding: 12px;
+  }
+  
+  .game-icon {
+    font-size: 1.8rem;
+  }
+  
+  .memory-grid {
+    max-width: 220px;
+  }
+  
+  .category-box {
+    min-height: 90px;
+  }
+  
+  .food-item {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Animations */
+.fade-in { animation: fadeIn .5s ease-in; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+@keyframes celebrate {
+  0% { transform: translateY(0) scale(0); opacity:1; }
+  50% { transform: translateY(-50px) scale(1); opacity:1; }
+  100% { transform: translateY(-100px) scale(0); opacity:0; }
+}
+.big-emoji{
+  font-size: 34px;      /* كبّر/صغّر حسب رغبتك */
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(1px);
+  margin-inline-end: 8px;
+}
+
+.food-item{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border, #e5e7eb);
+  background: var(--card, #fff);
+  cursor:grab;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.food-item:active{ cursor:grabbing; }
+.food-item:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.category-box .badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:12px;
+  margin:4px;
+  animation: popIn .12s ease-out;
+}
+.category-box .badge .food-name{ font-weight:600; }
+
+.droppable-hover{ background: rgba(59,130,246,.06); }
+.hint-flash{ outline:3px dashed #22c55e; outline-offset:4px; animation: hf .9s ease-out 1; }
+
+@keyframes popIn { from{ transform: scale(.9); opacity:.6 } to{ transform: scale(1); opacity:1 } }
+@keyframes hf { from{ background:rgba(34,197,94,.08);} to{ background:transparent;} }
+
+
+  </style>
+</head>
+<body>
+  <!-- Navigation will be loaded by JavaScript -->
+
+  <!-- Main Container -->
+  <div class="main-container"> <!-- مساحة للـ navigation bar محددة في CSS -->
+    <!-- Daily Challenge Section -->
+    <section class="daily-challenge" id="dailyChallenge" aria-label="تحدي اليوم">
+      <div class="daily-head">
+        <div class="daily-title">🔥 تحدّي اليوم</div>
+        <div class="daily-meta">
+          <span class="streak-pill" id="dailyStreak">سلسلة: 0 يوم</span>
+          <span class="streak-pill" id="dailyStatus">الحالة: لم يبدأ</span>
+        </div>
+      </div>
+      <div class="daily-body">
+        <div class="daily-desc" id="dailyDesc">كل يوم نقدّم لك لعبة سريعة لتعزيز عادات صحية. ابدأ الآن لزيادة سلسلة التحديات اليومية!</div>
+        <button class="daily-btn" id="dailyStartBtn">ابدأ التحدي</button>
+      </div>
+    </section>
+    <!-- Hero Section -->
+    <section class="hero fade-in">
+      <h1>🌟 مركز التوعية بالسمنة والصحة</h1>
+      <p>تعلم عن الصحة والتغذية من خلال ألعاب تفاعلية ممتعة ومفيدة</p>
+      <div class="hero-stats">
+        <span>💪 نمط حياة صحي</span> • 
+        <span>🥗 تغذية متوازنة</span> • 
+        <span>🏃 نشاط بدني</span>
+      </div>
+    </section>
+
+    <!-- Games Selection -->
+    <section class="games-section" id="gamesSelection">
+      <h2 class="section-title">🎯 ألعاب التوعية الصحية</h2>
+      <div class="games-grid">
+        <a class="game-card" href="./games/game1.html" data-game="nutrition">
+          <span class="game-icon">🥗</span>
+          <h3 class="game-title">اختبار التغذية</h3>
+          <p class="game-description">اكتشف معلوماتك حول الأغذية الصحية والضارة وتأثيرها على الوزن والصحة العامة</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game2.html" data-game="food-memory">
+          <span class="game-icon">🍎</span>
+          <h3 class="game-title">ذاكرة الأطعمة الصحية</h3>
+          <p class="game-description">اختبر ذاكرتك بالعثور على أزواج الأطعمة الصحية وتعلم فوائدها</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game3.html" data-game="food-categorizer">
+          <span class="game-icon">⚖️</span>
+          <h3 class="game-title">مصنف الأطعمة</h3>
+          <p class="game-description">صنف الأطعمة إلى صحية وغير صحية وتعلم كيفية اتخاذ خيارات غذائية ذكية</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+
+        <a class="game-card" href="./games/game5.html" data-game="exercise-quiz">
+          <span class="game-icon">🏃</span>
+          <h3 class="game-title">اختبار الرياضة والحركة</h3>
+          <p class="game-description">تعلم عن أهمية النشاط البدني في منع السمنة والحفاظ على الصحة</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game6.html" data-game="lifestyle-challenge">
+          <span class="game-icon">🎯</span>
+          <h3 class="game-title">تحدي نمط الحياة</h3>
+          <p class="game-description">اختبار شامل حول العادات الصحية وكيفية تطوير نمط حياة صحي</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+
+        <a class="game-card" href="./games/game13.html" data-game="cooking-game">
+          <span class="game-icon">👨‍🍳</span>
+          <h3 class="game-title">لعبة الطبخ الصحي</h3>
+          <p class="game-description">اطبخ وجبات صحية واكتشف طرق التحضير السليمة</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game10.html" data-game="body-parts-quiz">
+          <span class="game-icon">🎯</span>
+          <h3 class="game-title">اختبار تأثير السمنة على الجسم</h3>
+          <p class="game-description">تعلم كيف تؤثر السمنة على أعضاء الجسم المختلفة</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game12.html" data-game="habit-tracker">
+          <span class="game-icon">📈</span>
+          <h3 class="game-title">متتبع العادات الصحية</h3>
+          <p class="game-description">تتبع عاداتك اليومية واحصل على نصائح للتحسين</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+        <a class="game-card" href="./games/game11.html" data-game="portion-size-game">
+          <span class="game-icon">🍽️</span>
+          <h3 class="game-title">لعبة أحجام الحصص</h3>
+          <p class="game-description">تعلم الأحجام الصحيحة لحصص الطعام المختلفة</p>
+          <button class="play-btn" type="button">ابدأ اللعب</button>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- تم نقل تشغيل الألعاب لصفحات مستقلة -->
+  </div>
+
+  
+
+
+  <!-- Load core scripts -->
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/utils.js"></script>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/game-navigation.js"></script>
+  <script src="../../assets/js/dev-tools.js"></script>
+  <script src="../../assets/js/test-suite.js"></script>
+  <script src="../../assets/js/navbar.js"></script>
+  
+ 
+  <script src="../../assets/js/navbar.js"></script>
+</body>
+</html>

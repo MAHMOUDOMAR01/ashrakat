@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لعبة أحجام الحصص الغذائية - نسخة متطورة</title>
+  <style>
+    
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --secondary: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgMove 15s ease-in-out infinite;
+    }
+    
+    @keyframes bgMove {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3)); }
+      50% { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.6)); }
+    }
+    
+    .stats-container {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 20px;
+      min-width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .progress-bar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      transition: width 0.5s ease;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .control-btn {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      border-radius: 16px;
+      padding: 12px 24px;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+    
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      border-color: var(--purple);
+    }
+    
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    
+    .question-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+      animation: cardPulse 3s infinite;
+    }
+    
+    @keyframes cardPulse {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
+    }
+    
+    .question-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(16, 185, 129, 0.2);
+    }
+    
+    .question-card.answered {
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+    
+    .question-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 12px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .food-item-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.08));
+      border-radius: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .food-emoji {
+      font-size: 48px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    .food-name {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--text), var(--text-muted));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .option-btn {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 14px 20px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: right;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    
+    .option-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .option-btn:hover {
+      transform: translateX(-4px);
+      border-color: var(--purple);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+    }
+    
+    .option-btn.correct {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(34, 197, 94, 0.2));
+      border-color: var(--primary);
+      animation: correctAnswer 0.5s ease-out;
+    }
+    
+    @keyframes correctAnswer {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .option-btn.wrong {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.2));
+      border-color: var(--danger);
+      animation: shake 0.5s ease-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .feedback-text {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .feedback-text.correct {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+    
+    .feedback-text.wrong {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: modalSlideUp 0.4s ease-out;
+      text-align: center;
+    }
+    
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .modal-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: iconRotate 1s ease-out;
+    }
+    
+    @keyframes iconRotate {
+      0% { transform: scale(0) rotate(-180deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+    
+    .modal-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .modal-message {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .modal-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .modal-stat {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    
+    .modal-stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    
+    .modal-stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      margin: 8px;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 8px;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .feedback-toast {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: linear-gradient(135deg, var(--success), var(--primary));
+      color: white;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+    
+    .feedback-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .feedback-toast.error {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .header {
+        padding: 16px;
+      }
+      
+      .logo {
+        font-size: 20px;
+      }
+      
+      .questions-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .food-emoji {
+        font-size: 36px;
+      }
+      
+      .food-name {
+        font-size: 18px;
+      }
+      
+      .modal-content {
+        padding: 24px;
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+    <a href="../games.html" class="back-button">العودة إلى قائمة الألعاب</a>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span>🍽️</span>
+          <span>اختبار أحجام الحصص</span>
+        </div>
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-label">الأسئلة</div>
+            <div class="stat-value" id="totalQuestions">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">صحيحة</div>
+            <div class="stat-value" id="correctCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">خاطئة</div>
+            <div class="stat-value" id="wrongCount">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">النقاط</div>
+            <div class="stat-value" id="scoreCount">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" id="btnRestart">🔄 إعادة الاختبار</button>
+      <button class="control-btn" id="btnCheckAll">✓ التحقق من الإجابات</button>
+    </div>
+
+    <div class="questions-grid" id="questionsGrid"></div>
+  </div>
+
+  <div class="modal" id="gameModal">
+    <div class="modal-content">
+      <div class="modal-icon" id="modalIcon">🎉</div>
+      <div class="modal-title" id="modalTitle">أحسنت!</div>
+      <div class="modal-message" id="modalMessage"></div>
+      
+      <div class="modal-stats" id="modalStats"></div>
+      
+      <div>
+        <button class="btn-primary" onclick="restartGame()">🔄 إعادة الاختبار</button>
+        <button class="btn-secondary" onclick="closeModal()">✓ حسناً</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback-toast" id="feedbackToast"></div>
+
+  <script>
+    const QUESTIONS = [
+      {name: 'أرز مطبوخ', emoji: '🍚', correct: '150 جرام', options: ['100 جرام', '150 جرام', '250 جرام', '300 جرام']},
+      {name: 'مكرونة مطبوخة', emoji: '🍝', correct: '150 جرام', options: ['100 جرام', '150 جرام', '200 جرام', '300 جرام']},
+      {name: 'لحم مشوي', emoji: '🥩', correct: '90 جرام', options: ['50 جرام', '90 جرام', '150 جرام', '200 جرام']},
+      {name: 'دجاج مشوي', emoji: '🍗', correct: '100 جرام', options: ['70 جرام', '100 جرام', '150 جرام', '200 جرام']},
+      {name: 'سمك مشوي', emoji: '🐟', correct: '100 جرام', options: ['70 جرام', '100 جرام', '150 جرام', '200 جرام']},
+      {name: 'جبن', emoji: '🧀', correct: '30 جرام', options: ['20 جرام', '30 جرام', '50 جرام', '80 جرام']},
+      {name: 'زبدة الفول السوداني', emoji: '🥜', correct: '32 جرام', options: ['15 جرام', '32 جرام', '50 جرام', '70 جرام']},
+      {name: 'خضار طازجة', emoji: '🥗', correct: '200 جرام', options: ['100 جرام', '150 جرام', '200 جرام', '300 جرام']},
+      {name: 'فواكه طازجة', emoji: '🍎', correct: '150 جرام', options: ['80 جرام', '150 جرام', '250 جرام', '300 جرام']},
+      {name: 'مكسرات', emoji: '🌰', correct: '30 جرام', options: ['15 جرام', '30 جرام', '60 جرام', '100 جرام']},
+      {name: 'خبز', emoji: '🍞', correct: '30 جرام', options: ['20 جرام', '30 جرام', '50 جرام', '70 جرام']},
+      {name: 'بطاطس مسلوقة', emoji: '🥔', correct: '150 جرام', options: ['100 جرام', '150 جرام', '200 جرام', '300 جرام']},
+      {name: 'حليب', emoji: '🥛', correct: '240 مل', options: ['120 مل', '240 مل', '350 مل', '500 مل']},
+      {name: 'زبادي', emoji: '🥣', correct: '200 جرام', options: ['100 جرام', '200 جرام', '300 جرام', '400 جرام']},
+      {name: 'بيض', emoji: '🥚', correct: '50 جرام', options: ['30 جرام', '50 جرام', '80 جرام', '100 جرام']},
+      {name: 'زيت زيتون', emoji: '🫒', correct: '15 مل', options: ['10 مل', '15 مل', '30 مل', '50 مل']},
+      {name: 'عسل', emoji: '🍯', correct: '20 جرام', options: ['10 جرام', '20 جرام', '40 جرام', '60 جرام']},
+      {name: 'فول مطبوخ', emoji: '🫘', correct: '100 جرام', options: ['70 جرام', '100 جرام', '150 جرام', '200 جرام']}
+    ];
+
+
+    let gameState = {
+      answers: {},
+      correctCount: 0,
+      wrongCount: 0,
+      score: 0,
+      questionsAnswered: 0,
+      startTime: null
+    };
+
+    function initGame() {
+      gameState.answers = {};
+      gameState.correctCount = 0;
+      gameState.wrongCount = 0;
+      gameState.score = 0;
+      gameState.questionsAnswered = 0;
+      gameState.startTime = Date.now();
+      
+      renderQuestions();
+      updateStats();
+    }
+
+    function renderQuestions() {
+      const grid = document.getElementById('questionsGrid');
+      
+      grid.innerHTML = QUESTIONS.map((q, index) => `
+        <div class="question-card" id="card-${index}">
+          <div class="question-number">${index + 1}</div>
+          
+          <div class="food-item-display">
+            <span class="food-emoji">${q.emoji}</span>
+            <span class="food-name">${q.name}</span>
+          </div>
+          
+          <div class="options-container">
+            ${q.options.map(opt => `
+              <button class="option-btn" data-question="${index}" data-answer="${opt}">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          
+          <div class="feedback-text" id="feedback-${index}" style="display: none;"></div>
+        </div>
+      `).join('');
+      
+      // Add event listeners
+      grid.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', handleAnswer);
+      });
+    }
+
+    function handleAnswer(e) {
+      const btn = e.currentTarget;
+      const questionIndex = parseInt(btn.dataset.question);
+      const selectedAnswer = btn.dataset.answer;
+      const question = QUESTIONS[questionIndex];
+      
+      // Check if already answered
+      if (gameState.answers[questionIndex]) {
+        return;
+      }
+      
+      // Mark as answered
+      gameState.answers[questionIndex] = selectedAnswer;
+      gameState.questionsAnswered++;
+      
+      // Disable all buttons for this question
+      const card = document.getElementById(`card-${questionIndex}`);
+      card.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+      card.classList.add('answered');
+      
+      // Check if correct
+      const isCorrect = selectedAnswer === question.correct;
+      const feedback = document.getElementById(`feedback-${questionIndex}`);
+      
+      if (isCorrect) {
+        btn.classList.add('correct');
+        feedback.className = 'feedback-text correct';
+        feedback.textContent = `✅ ممتاز! الإجابة صحيحة`;
+        gameState.correctCount++;
+        gameState.score += 100;
+        showFeedback(`✅ إجابة صحيحة عن ${question.name}!`, 'success');
+      } else {
+        btn.classList.add('wrong');
+        feedback.className = 'feedback-text wrong';
+        feedback.textContent = `❌ الإجابة الصحيحة: ${question.correct}`;
+        gameState.wrongCount++;
+        showFeedback(`❌ إجابة خاطئة! الحجم الصحيح: ${question.correct}`, 'error');
+        
+        // Highlight correct answer
+        card.querySelectorAll('.option-btn').forEach(b => {
+          if (b.dataset.answer === question.correct) {
+            b.classList.add('correct');
+          }
+        });
+      }
+      
+      feedback.style.display = 'block';
+      updateStats();
+      
+      // Check if all answered
+      if (gameState.questionsAnswered === QUESTIONS.length) {
+        setTimeout(() => {
+          gameCompleted();
+        }, 1000);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalQuestions').textContent = QUESTIONS.length;
+      document.getElementById('correctCount').textContent = gameState.correctCount;
+      document.getElementById('wrongCount').textContent = gameState.wrongCount;
+      document.getElementById('scoreCount').textContent = gameState.score;
+      
+      const progress = (gameState.questionsAnswered / QUESTIONS.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function showFeedback(message, type) {
+      const toast = document.getElementById('feedbackToast');
+      toast.textContent = message;
+      toast.className = 'feedback-toast show ' + type;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function checkAllAnswers() {
+      if (gameState.questionsAnswered === 0) {
+        showFeedback('⚠️ لم تجب على أي سؤال بعد!', 'error');
+        return;
+      }
+      
+      if (gameState.questionsAnswered < QUESTIONS.length) {
+        showFeedback(`⚠️ لم تجب على جميع الأسئلة بعد! متبقي ${QUESTIONS.length - gameState.questionsAnswered}`, 'error');
+        return;
+      }
+      
+      gameCompleted();
+    }
+
+    function gameCompleted() {
+      const timeTaken = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const accuracy = Math.round((gameState.correctCount / QUESTIONS.length) * 100);
+      
+      // Time bonus
+      if (timeTaken < 60) {
+        gameState.score += 200;
+      } else if (timeTaken < 120) {
+        gameState.score += 100;
+      }
+      
+      // Perfect score bonus
+      if (gameState.correctCount === QUESTIONS.length) {
+        gameState.score += 500;
+      }
+      
+      const grade = accuracy === 100 ? '🏆 مثالي' :
+                    accuracy >= 80 ? '⭐ ممتاز جداً' :
+                    accuracy >= 60 ? '👍 جيد جداً' :
+                    accuracy >= 40 ? '📚 جيد' : '💪 حاول مرة أخرى';
+      
+      showModal(
+        accuracy >= 80 ? '🎉' : accuracy >= 60 ? '👏' : '📖',
+        accuracy >= 80 ? 'مبروك! نتيجة رائعة' : 'أكملت الاختبار',
+        `لقد أجبت على ${gameState.correctCount} من ${QUESTIONS.length} سؤال بشكل صحيح!\n${grade}`,
+        [
+          {label: 'النقاط النهائية', value: gameState.score},
+          {label: 'إجابات صحيحة', value: gameState.correctCount},
+          {label: 'إجابات خاطئة', value: gameState.wrongCount},
+          {label: 'نسبة النجاح', value: `${accuracy}%`},
+          {label: 'الوقت المستغرق', value: `${timeTaken}ث`}
+        ]
+      );
+    }
+
+    function showModal(icon, title, message, stats) {
+      const modal = document.getElementById('gameModal');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalStats = document.getElementById('modalStats');
+      
+      modalIcon.textContent = icon;
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      
+      modalStats.innerHTML = stats.map(stat => `
+        <div class="modal-stat">
+          <div class="modal-stat-value">${stat.value}</div>
+          <div class="modal-stat-label">${stat.label}</div>
+        </div>
+      `).join('');
+      
+      modal.classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('gameModal').classList.remove('show');
+    }
+
+    function restartGame() {
+      closeModal();
+      initGame();
+    }
+
+    // Event listeners
+    document.getElementById('btnRestart').addEventListener('click', restartGame);
+    document.getElementById('btnCheckAll').addEventListener('click', checkAllAnswers);
+
+    // Initialize game
+    initGame();
+  </script>
+</body>
+</html>
+
+

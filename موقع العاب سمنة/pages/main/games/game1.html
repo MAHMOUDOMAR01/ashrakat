@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اختبار التغذية - نسخة متطورة</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --secondary: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3)); }
+      50% { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.6)); }
+    }
+    
+    .stats-container {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 20px;
+      min-width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .game-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .difficulty-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .difficulty-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border: 2px solid transparent;
+      border-radius: 20px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .difficulty-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .difficulty-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .difficulty-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.1));
+    }
+    
+    .difficulty-card.selected::before {
+      opacity: 0.1;
+    }
+    
+    .difficulty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .difficulty-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .difficulty-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .question-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    
+    .timer-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+      padding: 12px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    .timer-icon {
+      font-size: 24px;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .timer-value {
+      font-size: 24px;
+      font-weight: 800;
+      min-width: 50px;
+      text-align: center;
+    }
+    
+    .timer-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    
+    .timer-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+      transition: width 1s linear;
+      border-radius: 10px;
+    }
+    
+    .question-text {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.6;
+      margin: 24px 0;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05));
+      border-right: 4px solid var(--primary);
+      border-radius: 16px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .option-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+    
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    
+    .option-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .option-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+      border-color: var(--secondary);
+    }
+    
+    .option-btn.selected {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.1));
+      border-color: var(--warning);
+      transform: scale(1.02);
+    }
+    
+    .option-btn.correct {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1));
+      border-color: var(--success);
+      animation: correctPulse 0.6s ease-out;
+    }
+    
+    .option-btn.wrong {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+      border-color: var(--danger);
+      animation: shake 0.5s ease-out;
+    }
+    
+    @keyframes correctPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .option-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .lifelines {
+      display: flex;
+      gap: 12px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .lifeline-btn {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      border-radius: 16px;
+      padding: 12px 24px;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .lifeline-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    .lifeline-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .pause-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      border: 2px solid rgba(59, 130, 246, 0.4);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pause-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    
+    .pause-btn:hover::before {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .pause-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    }
+    
+    .pause-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .pause-btn.paused {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+      border-color: rgba(34, 197, 94, 0.4);
+      animation: pausePulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pausePulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.6); }
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    
+    .feedback-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05));
+      border: 2px solid rgba(34, 197, 94, 0.4);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 24px;
+      display: none;
+      animation: slideUp 0.4s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .feedback-box.error {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    
+    .feedback-box.show {
+      display: block;
+    }
+    
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      animation: streakPulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes streakPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 32px 0;
+    }
+    
+    .summary-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .summary-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    
+    .summary-value {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    
+    .summary-label {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    .achievement {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.1));
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: achievementPop 0.6s ease-out;
+    }
+    
+    @keyframes achievementPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      50% { transform: scale(1.1) rotate(10deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    
+    .achievement-icon {
+      font-size: 48px;
+    }
+    
+    .progress-ring {
+      width: 120px;
+      height: 120px;
+      margin: 20px auto;
+    }
+    
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.5s ease;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .header {
+        padding: 16px;
+      }
+      
+      .game-card {
+        padding: 20px;
+      }
+      
+      .difficulty-selector {
+        grid-template-columns: 1fr;
+      }
+      
+      .question-text {
+        font-size: 18px;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../games.html" class="back-button">العودة إلى قائمة الألعاب</a>
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span>🥗</span>
+          <span>اختبار التغذية الذكي</span>
+        </div>
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-label">النقاط</div>
+            <div class="stat-value" id="totalScore">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">المستوى</div>
+            <div class="stat-value" id="currentLevel">1</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">أفضل سلسلة</div>
+            <div class="stat-value" id="bestStreak">0</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="gameContent"></div>
+  </div>
+
+  <script>
+    const DIFFICULTIES = {
+      easy: {
+        label: 'سهل',
+        icon: '🟢',
+        desc: 'أسئلة بسيطة - وقت كافي',
+        basePoints: 15,
+        timeLimit: 25,
+        color: '#22c55e'
+      },
+      medium: {
+        label: 'متوسط',
+        icon: '🟡',
+        desc: 'تحدي معتدل - توازن مثالي',
+        basePoints: 25,
+        timeLimit: 20,
+        color: '#f59e0b'
+      },
+      hard: {
+        label: 'صعب',
+        icon: '🔴',
+        desc: 'للمحترفين - اختبار حقيقي',
+        basePoints: 40,
+        timeLimit: 15,
+        color: '#ef4444'
+      }
+    };
+
+    const QUESTIONS_BANK = [
+      {q: "أي من التالي غني بالألياف ويساعد على الشبع؟", opts: ["الخس والبقوليات", "النودلز سريعة التحضير", "العصائر المحلاة", "المخبوزات المحلاة"], a: 0, diff: 'easy', hint: "فكّر في أطعمة كاملة قليلة المعالجة", exp: "الألياف في الخضار والبقوليات تعزز الامتلاء وتقلل السعرات"},
+      {q: "أفضل نوع دهون صحية للقلب:", opts: ["دهون متحولة", "دهون مشبعة", "دهون غير مشبعة (زيت زيتون/مكسرات)", "لا دهون إطلاقاً"], a: 2, diff: 'easy', hint: "موجودة في الزيتون والمكسرات", exp: "الدهون غير المشبعة تدعم صحة القلب عند استخدامها باعتدال"},
+      {q: "لخفض السكر في الدم تدريجيًا اختر:", opts: ["خبز أبيض", "خبز أسمر/حبوب كاملة", "حلويات", "مشروب غازي"], a: 1, diff: 'easy', hint: "ألياف + حبوب كاملة", exp: "الحبوب الكاملة تُبطئ امتصاص الجلوكوز وتقلل الذروة"},
+      {q: "عادة تزيد من استهلاك سعرات دون وعي:", opts: ["الأكل الواعي", "الأكل أمام الشاشات", "تسجيل الوجبات", "التحضير المُسبق"], a: 1, diff: 'medium', hint: "مرتبطة بالمشاهدة", exp: "الأكل أمام الشاشات يشتت الانتباه ويزيد الكميات المتناولة"},
+      {q: "أفضل توزيع للطبق الصحي:", opts: ["نصف خضار + ربع بروتين + ربع نشويات", "نصف بروتين", "نصف نشويات", "ثلاثة أرباع حلويات"], a: 0, diff: 'medium', hint: "فكّر في نموذج الطبق", exp: "نموذج الطبق الصحي: نصفه خضار وفاكهة، وربع بروتين، وربع نشويات كاملة"},
+      {q: "تناول البروتين في كل وجبة:", opts: ["يزيد الجوع", "يساعد بالشبع والحفاظ على العضلات", "يرفع سكر الدم بشكل كبير", "غير مهم"], a: 1, diff: 'medium', hint: "مشبع ومفيد للعضلات", exp: "البروتين يعزّز الشبع ويحافظ على الكتلة العضلية أثناء خفض السعرات"},
+      {q: "كمية الماء اليومية الموصى بها تقريبية للبالغين:", opts: ["2–2.5 لتر", "كوب واحد", "5 لترات يوميًا للجميع", "لا حاجة للماء"], a: 0, diff: 'easy', hint: "حوالي 8–10 أكواب", exp: "الاحتياجات تختلف، لكن 2–2.5 لتر مرجع مناسب لكثير من البالغين"},
+      {q: "لاختيار سناك ذكي:", opts: ["بسكويت محلى", "مكسرات + فواكه", "مشروب غازي", "شيبس"], a: 1, diff: 'easy', hint: "دهون مفيدة + ألياف", exp: "مكسرات + فواكه تمنح شبعًا أفضل من السكريات البسيطة"},
+      {q: "خفض 500 سعرة يومياً يؤدي نظريًا إلى خسارة أسبوعية تقريبًا:", opts: ["0.5 كجم", "2 كجم", "لا شيء", "3 كجم"], a: 0, diff: 'hard', hint: "3500 سعرة ~ 0.45 كجم", exp: "نظريًا 3500 سعرة ≈ 0.45 كجم، أي ~0.5 كجم/أسبوع"},
+      {q: "أفضل وقت لتناول الكربوهيدرات المعقدة:", opts: ["قبل النوم مباشرة", "في الصباح وقبل التمرين", "لا فرق في التوقيت", "تجنبها تماماً"], a: 1, diff: 'medium', hint: "عندما يحتاج الجسم للطاقة", exp: "الكربوهيدرات المعقدة مفيدة في الصباح وقبل النشاط البدني لتوفير طاقة مستدامة"},
+      {q: "البروبيوتيك مفيد لـ:", opts: ["صحة العظام فقط", "صحة الجهاز الهضمي والمناعة", "زيادة الوزن", "لا فائدة منه"], a: 1, diff: 'medium', hint: "بكتيريا نافعة", exp: "البروبيوتيك يحسن صحة الأمعاء ويعزز جهاز المناعة"},
+      {q: "أفضل مصدر للكالسيوم النباتي:", opts: ["الخبز الأبيض", "الحلويات", "السبانخ والبروكلي واللوز", "المشروبات الغازية"], a: 2, diff: 'hard', hint: "خضروات ورقية ومكسرات", exp: "الخضروات الورقية الداكنة واللوز مصادر ممتازة للكالسيوم النباتي"}
+    ];
+
+    let gameState = {
+      difficulty: 'medium',
+      currentQuestion: 0,
+      score: 0,
+      level: 1,
+      streak: 0,
+      bestStreak: 0,
+      correctAnswers: 0,
+      questions: [],
+      answers: [],
+      lifelines: {
+        fifty: true,
+        hint: true,
+        skip: true
+      },
+      timeLeft: 0,
+      timerInterval: null,
+      timerPaused: false
+    };
+
+    function initGame() {
+      renderStartScreen();
+    }
+
+    function renderStartScreen() {
+      const content = document.getElementById('gameContent');
+      content.innerHTML = `
+        <div class="game-card">
+          <h2 style="text-align: center; font-size: 32px; margin-bottom: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+            🎯 اختر مستوى الصعوبة
+          </h2>
+          <p style="text-align: center; color: var(--text-muted); margin-bottom: 32px; font-size: 18px;">
+            اختبر معلوماتك في التغذية واكسب النقاط!
+          </p>
+          
+          <div class="difficulty-selector">
+            ${Object.entries(DIFFICULTIES).map(([key, diff]) => `
+              <div class="difficulty-card ${gameState.difficulty === key ? 'selected' : ''}" onclick="selectDifficulty('${key}')">
+                <span class="difficulty-icon">${diff.icon}</span>
+                <div class="difficulty-name">${diff.label}</div>
+                <div class="difficulty-desc">${diff.desc}</div>
+                <div style="margin-top: 12px; font-size: 14px; color: var(--text-muted);">
+                  نقاط: ${diff.basePoints} | وقت: ${diff.timeLimit}ث
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="actions">
+            <button class="btn-primary" onclick="startGame()">
+              🚀 ابدأ اللعبة
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectDifficulty(diff) {
+      gameState.difficulty = diff;
+      renderStartScreen();
+    }
+
+    function startGame() {
+      const diff = gameState.difficulty;
+      let filteredQuestions = QUESTIONS_BANK.filter(q => {
+        if (diff === 'easy') return q.diff !== 'hard';
+        if (diff === 'hard') return q.diff !== 'easy';
+        return true;
+      });
+      
+      gameState.questions = shuffleArray(filteredQuestions).slice(0, 10);
+      gameState.currentQuestion = 0;
+      gameState.answers = [];
+      gameState.lifelines = { fifty: true, hint: true, skip: true };
+      
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      if (gameState.currentQuestion >= gameState.questions.length) {
+        renderSummary();
+        return;
+      }
+
+      const q = gameState.questions[gameState.currentQuestion];
+      const diff = DIFFICULTIES[gameState.difficulty];
+      gameState.timeLeft = diff.timeLimit;
+      gameState.timerPaused = false;
+
+      const content = document.getElementById('gameContent');
+      content.innerHTML = `
+        <div class="game-card">
+          <div class="question-header">
+            <div class="question-number">
+              سؤال ${gameState.currentQuestion + 1} من ${gameState.questions.length}
+            </div>
+            
+            ${gameState.streak > 0 ? `
+              <div class="streak-badge">
+                🔥 سلسلة: ${gameState.streak}
+              </div>
+            ` : ''}
+            
+            <div class="timer-container">
+              <span class="timer-icon">⏱️</span>
+              <span class="timer-value" id="timerValue">${gameState.timeLeft}</span>
+              <button class="pause-btn" id="pauseBtn" onclick="toggleTimer()" title="إيقاف/تشغيل المؤقت">
+                <span id="pauseIcon">⏸️</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="timer-bar">
+            <div class="timer-fill" id="timerFill" style="width: 100%"></div>
+          </div>
+          
+          <div class="question-text">
+            ${q.q}
+          </div>
+          
+          <div class="lifelines">
+            <button class="lifeline-btn" id="btn5050" onclick="useFiftyFifty()" ${!gameState.lifelines.fifty ? 'disabled' : ''}>
+              🎲 حذف إجابتين
+            </button>
+            <button class="lifeline-btn" id="btnHint" onclick="useHint()" ${!gameState.lifelines.hint ? 'disabled' : ''}>
+              💡 تلميح
+            </button>
+            <button class="lifeline-btn" id="btnSkip" onclick="skipQuestion()" ${!gameState.lifelines.skip ? 'disabled' : ''}>
+              ⏭️ تخطي
+            </button>
+          </div>
+          
+          <div class="options-grid" id="optionsGrid">
+            ${q.opts.map((opt, idx) => `
+              <button class="option-btn" data-idx="${idx}" onclick="selectOption(${idx})">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          
+          <div class="feedback-box" id="feedbackBox"></div>
+          
+          <div class="actions">
+            <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">
+              ✓ تأكيد الإجابة
+            </button>
+            <button class="btn-secondary" onclick="quitGame()">
+              إنهاء الجولة
+            </button>
+          </div>
+        </div>
+      `;
+
+      startTimer();
+    }
+
+    let selectedOption = -1;
+
+    function selectOption(idx) {
+      selectedOption = idx;
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      document.querySelector(`[data-idx="${idx}"]`).classList.add('selected');
+    }
+
+    function startTimer() {
+      clearInterval(gameState.timerInterval);
+      gameState.timerPaused = false;
+      
+      gameState.timerInterval = setInterval(() => {
+        if (!gameState.timerPaused) {
+          gameState.timeLeft--;
+          
+          const timerValue = document.getElementById('timerValue');
+          const timerFill = document.getElementById('timerFill');
+          
+          if (timerValue) timerValue.textContent = gameState.timeLeft;
+          if (timerFill) {
+            const percent = (gameState.timeLeft / DIFFICULTIES[gameState.difficulty].timeLimit) * 100;
+            timerFill.style.width = percent + '%';
+          }
+          
+          if (gameState.timeLeft <= 0) {
+            clearInterval(gameState.timerInterval);
+            submitAnswer(true);
+          }
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      gameState.timerPaused = !gameState.timerPaused;
+      
+      const pauseBtn = document.getElementById('pauseBtn');
+      const pauseIcon = document.getElementById('pauseIcon');
+      
+      if (gameState.timerPaused) {
+        pauseBtn.classList.add('paused');
+        pauseIcon.textContent = '▶️';
+        pauseBtn.title = 'تشغيل المؤقت';
+      } else {
+        pauseBtn.classList.remove('paused');
+        pauseIcon.textContent = '⏸️';
+        pauseBtn.title = 'إيقاف المؤقت';
+      }
+    }
+
+    function submitAnswer(timeout = false) {
+      clearInterval(gameState.timerInterval);
+      
+      if (selectedOption === -1 && !timeout) {
+        showFeedback('⚠️ الرجاء اختيار إجابة أولاً', 'error');
+        startTimer();
+        return;
+      }
+
+      const q = gameState.questions[gameState.currentQuestion];
+      const isCorrect = selectedOption === q.a && !timeout;
+      
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.style.pointerEvents = 'none';
+      });
+      
+      const correctBtn = document.querySelector(`[data-idx="${q.a}"]`);
+      if (correctBtn) correctBtn.classList.add('correct');
+      
+      if (!isCorrect && selectedOption >= 0) {
+        const wrongBtn = document.querySelector(`[data-idx="${selectedOption}"]`);
+        if (wrongBtn) wrongBtn.classList.add('wrong');
+      }
+      
+      let points = 0;
+      if (isCorrect) {
+        const diff = DIFFICULTIES[gameState.difficulty];
+        gameState.streak++;
+        gameState.bestStreak = Math.max(gameState.bestStreak, gameState.streak);
+        
+        const timeBonus = Math.floor(gameState.timeLeft / 2);
+        const streakBonus = gameState.streak > 1 ? (gameState.streak - 1) * 5 : 0;
+        points = diff.basePoints + timeBonus + streakBonus;
+        
+        gameState.score += points;
+        gameState.correctAnswers++;
+        
+        if (gameState.correctAnswers % 3 === 0) {
+          gameState.level++;
+        }
+        
+        showFeedback(`✨ إجابة صحيحة! +${points} نقطة<br><small>${q.exp}</small>`, 'success');
+      } else {
+        gameState.streak = 0;
+        const msg = timeout ? '⏰ انتهى الوقت!' : '❌ إجابة خاطئة';
+        showFeedback(`${msg}<br><small>${q.exp}</small>`, 'error');
+      }
+      
+      updateStats();
+      
+      gameState.answers.push({
+        question: q.q,
+        selected: selectedOption >= 0 ? q.opts[selectedOption] : 'لم يتم الاختيار',
+        correct: q.opts[q.a],
+        isCorrect: isCorrect,
+        points: points
+      });
+      
+      setTimeout(() => {
+        selectedOption = -1;
+        gameState.currentQuestion++;
+        renderQuestion();
+      }, 3000);
+    }
+
+    function useFiftyFifty() {
+      if (!gameState.lifelines.fifty) return;
+      
+      gameState.lifelines.fifty = false;
+      const q = gameState.questions[gameState.currentQuestion];
+      const wrongIndices = q.opts.map((_, i) => i).filter(i => i !== q.a);
+      const toRemove = shuffleArray(wrongIndices).slice(0, 2);
+      
+      toRemove.forEach(idx => {
+        const btn = document.querySelector(`[data-idx="${idx}"]`);
+        if (btn) {
+          btn.disabled = true;
+          btn.style.opacity = '0.3';
+        }
+      });
+      
+      document.getElementById('btn5050').disabled = true;
+      showFeedback('🎲 تم حذف إجابتين خاطئتين!', 'success');
+    }
+
+    function useHint() {
+      if (!gameState.lifelines.hint) return;
+      
+      gameState.lifelines.hint = false;
+      const q = gameState.questions[gameState.currentQuestion];
+      
+      document.getElementById('btnHint').disabled = true;
+      showFeedback(`💡 تلميح: ${q.hint}`, 'success');
+    }
+
+    function skipQuestion() {
+      if (!gameState.lifelines.skip) return;
+      
+      gameState.lifelines.skip = false;
+      gameState.streak = 0;
+      
+      clearInterval(gameState.timerInterval);
+      selectedOption = -1;
+      gameState.currentQuestion++;
+      renderQuestion();
+    }
+
+    function renderSummary() {
+      clearInterval(gameState.timerInterval);
+      
+      const accuracy = gameState.questions.length > 0 
+        ? Math.round((gameState.correctAnswers / gameState.questions.length) * 100) 
+        : 0;
+      
+      const grade = accuracy >= 90 ? '🏆 ممتاز' :
+                    accuracy >= 70 ? '⭐ جيد جداً' :
+                    accuracy >= 50 ? '👍 جيد' : '📚 يحتاج تحسين';
+
+      const content = document.getElementById('gameContent');
+      content.innerHTML = `
+        <div class="game-card">
+          <div style="text-align: center; margin-bottom: 32px;">
+            <h2 style="font-size: 42px; margin-bottom: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+              🎉 انتهت الجولة!
+            </h2>
+            <div style="font-size: 64px; margin: 20px 0;">
+              ${grade.split(' ')[0]}
+            </div>
+            <div style="font-size: 24px; font-weight: 700; color: var(--text-muted);">
+              ${grade}
+            </div>
+          </div>
+          
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-icon">💯</div>
+              <div class="summary-value">${gameState.score}</div>
+              <div class="summary-label">مجموع النقاط</div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-icon">✅</div>
+              <div class="summary-value">${gameState.correctAnswers}/${gameState.questions.length}</div>
+              <div class="summary-label">إجابات صحيحة</div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-icon">📊</div>
+              <div class="summary-value">${accuracy}%</div>
+              <div class="summary-label">نسبة النجاح</div>
+            </div>
+            
+            <div class="summary-card">
+              <div class="summary-icon">🔥</div>
+              <div class="summary-value">${gameState.bestStreak}</div>
+              <div class="summary-label">أفضل سلسلة</div>
+            </div>
+          </div>
+          
+          ${gameState.bestStreak >= 5 ? `
+            <div class="achievement">
+              <div class="achievement-icon">🏅</div>
+              <div>
+                <div style="font-weight: 700; font-size: 18px;">إنجاز جديد!</div>
+                <div style="color: var(--text-muted);">حققت سلسلة ${gameState.bestStreak} إجابات صحيحة متتالية!</div>
+              </div>
+            </div>
+          ` : ''}
+          
+          ${accuracy === 100 ? `
+            <div class="achievement">
+              <div class="achievement-icon">🌟</div>
+              <div>
+                <div style="font-weight: 700; font-size: 18px;">نتيجة مثالية!</div>
+                <div style="color: var(--text-muted);">أجبت على جميع الأسئلة بشكل صحيح!</div>
+              </div>
+            </div>
+          ` : ''}
+          
+          <div style="margin: 32px 0; padding: 24px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05)); border-radius: 16px; border-right: 4px solid var(--primary);">
+            <h3 style="margin-bottom: 16px; font-size: 20px;">📝 تفاصيل الإجابات</h3>
+            ${gameState.answers.map((ans, idx) => `
+              <div style="margin: 12px 0; padding: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+                <div style="display: flex; align-items: start; gap: 12px;">
+                  <span style="font-size: 24px;">${ans.isCorrect ? '✅' : '❌'}</span>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">سؤال ${idx + 1}: ${ans.question}</div>
+                    <div style="font-size: 14px; color: var(--text-muted);">
+                      ${!ans.isCorrect ? `
+                        <div style="margin-bottom: 4px;">إجابتك: <span style="color: var(--danger);">${ans.selected}</span></div>
+                      ` : ''}
+                      <div>الإجابة الصحيحة: <span style="color: var(--success);">${ans.correct}</span></div>
+                      ${ans.isCorrect && ans.points > 0 ? `
+                        <div style="color: var(--warning); margin-top: 4px;">+${ans.points} نقطة</div>
+                      ` : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="actions">
+            <button class="btn-primary" onclick="restartGame()">
+              🔄 لعب مرة أخرى
+            </button>
+            <button class="btn-secondary" onclick="changeSettings()">
+              ⚙️ تغيير الإعدادات
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showFeedback(message, type) {
+      const box = document.getElementById('feedbackBox');
+      if (!box) return;
+      
+      box.innerHTML = message;
+      box.className = 'feedback-box ' + type + ' show';
+      
+      setTimeout(() => {
+        box.classList.remove('show');
+      }, 2800);
+    }
+
+    function updateStats() {
+      document.getElementById('totalScore').textContent = gameState.score;
+      document.getElementById('currentLevel').textContent = gameState.level;
+      document.getElementById('bestStreak').textContent = gameState.bestStreak;
+    }
+
+    function quitGame() {
+      if (confirm('هل أنت متأكد من إنهاء الجولة؟')) {
+        renderSummary();
+      }
+    }
+
+    function restartGame() {
+      gameState.currentQuestion = 0;
+      gameState.correctAnswers = 0;
+      gameState.streak = 0;
+      gameState.answers = [];
+      startGame();
+    }
+
+    function changeSettings() {
+      initGame();
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    initGame();
+  </script>
+</body>
+</html>
