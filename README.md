@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/30324150/README.md)
 # منصة التعلم التفاعلي - ألعاب التوعية الصحية 🎓
 
 ## نظرة عامة

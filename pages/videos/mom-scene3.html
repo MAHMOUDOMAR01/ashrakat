@@ -1,0 +1,764 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المشهد الثالث - كيفية إعداد طعام صحي لطفلك</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* تقليل الحركة عند طلب المستخدم */
+        @media (prefers-reduced-motion: reduce) {
+            .video-section,
+            .tips-box,
+            .food-group-card,
+            .dos-box,
+            .donts-box,
+            .warning-box,
+            .involvement-item,
+            .nav-btn {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: #e8eaf6;
+            transform: translateY(-2px);
+        }
+        
+        /* Video Section */
+        .video-section {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .video-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .video-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .video-container {
+            position: relative;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+        
+        .video-loading {
+            position: absolute;
+            color: white;
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        /* Content Section */
+        .content-section {
+            padding: 30px;
+            background: white;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* Cooking Tips Box */
+        .tips-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .tips-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tips-list li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            line-height: 1.6;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .tips-list li:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Food Groups Grid */
+        .food-groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .food-group-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+        }
+        
+        .food-group-card:nth-child(1) { border-left-color: #4CAF50; }
+        .food-group-card:nth-child(2) { border-left-color: #FF9800; }
+        .food-group-card:nth-child(3) { border-left-color: #2196F3; }
+        .food-group-card:nth-child(4) { border-left-color: #E91E63; }
+        
+        .food-group-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .food-group-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .food-group-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .food-group-card li {
+            padding: 8px 0;
+            color: #666;
+            position: relative;
+            padding-right: 20px;
+        }
+        
+        .food-group-card li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        /* Dos and Don'ts */
+        .dos-donts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .dos-box {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+        }
+        
+        .donts-box {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+        }
+        
+        .dos-box h3,
+        .donts-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .dos-box ul,
+        .donts-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .dos-box li,
+        .donts-box li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            line-height: 1.5;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Dangerous Practices Warning */
+        .warning-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .warning-box h3 {
+            color: #c62828;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .danger-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .danger-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .danger-card h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .danger-card p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        /* Involvement Section */
+        .involvement-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .involvement-box h3 {
+            color: #6a1b9a;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        
+        .involvement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .involvement-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .involvement-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .involvement-item .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .involvement-item p {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            width: 60%;
+            border-radius: 3px;
+        }
+        
+        /* Navigation */
+        .navigation-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+        }
+        
+        .scene-info {
+            text-align: center;
+            color: #666;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .video-placeholder {
+                height: 300px;
+            }
+            
+            .video-title {
+                font-size: 1.5em;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .food-groups-grid,
+            .dos-donts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="logo">👨‍🍳 المشهد الثالث - قسم الأم</div>
+            <div class="nav-links">
+                <a href="mom.html">🔙 قائمة المشاهد</a>
+                <a href="../videos/videos.html">🎥 قسم الفيديوهات</a>
+                <a href="../main/home.html">🏠 الرئيسية</a>
+            </div>
+        </nav>
+        
+        <!-- Video Section -->
+        <div class="video-section">
+            <div class="video-header">
+                <h1 class="video-title">🎬 المشهد الثالث</h1>
+                <p class="video-subtitle">كيفية إعداد طعام صحي لطفلك</p>
+            </div>
+            
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <iframe class="video-iframe" 
+                            src="https://drive.google.com/file/d/1BJQ6un93t2bgTsm7YQxa2xwEBRwbYrdL/preview" 
+                            title="المشهد الثالث - كيفية إعداد طعام صحي لطفلك"
+                            loading="lazy" allow="autoplay; fullscreen" allowfullscreen>
+                    </iframe>
+                    <div class="video-loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري تحميل الفيديو...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Section -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <span>🍳</span>
+                    أهم النقاط لإعداد طعام صحي
+                </h2>
+                
+                <!-- Cooking Tips -->
+                <div class="tips-box">
+                    <h3>
+                        <span>💡</span>
+                        تقنيات الطهي الصحي
+                    </h3>
+                    <ul class="tips-list">
+                        <li>🧼 اغسل الخضار والفواكه قبل تقطيعها لتجنب إهدار الفيتامينات القابلة للذوبان في الماء</li>
+                        <li>🍲 طهي الطعام تحت الضغط أو تغطيته أثناء الطهي للاحتفاظ بالعناصر الغذائية</li>
+                        <li>⏰ انقع الحبوب لتحسين جودة البروتين وتقليل وقت التحضير</li>
+                        <li>🔥 استخدم نار متوسطة للطهي لإثراء الطعام والحفاظ على قيمته الغذائية</li>
+                    </ul>
+                </div>
+                
+                <!-- Food Groups -->
+                <h3 style="color: #2c3e50; margin: 30px 0 20px; text-align: center; font-size: 1.5em;">
+                    <span>🥗</span>
+                    المجموعات الغذائية الأساسية
+                </h3>
+                
+                <div class="food-groups-grid">
+                    <div class="food-group-card">
+                        <h4>🥬 الخضروات والفواكه</h4>
+                        <ul>
+                            <li>مصدر غني بالفيتامينات</li>
+                            <li>غنية بالمعادن والألياف</li>
+                            <li>تقوي المناعة</li>
+                            <li>تساعد على الهضم</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="food-group-card">
+                        <h4>🌾 الحبوب الكاملة</h4>
+                        <ul>
+                            <li>الأرز البني</li>
+                            <li>الخبز الأسمر</li>
+                            <li>الشوفان</li>
+                            <li>توفر الطاقة المستدامة</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="food-group-card">
+                        <h4>🍗 البروتينات الصحية</h4>
+                        <ul>
+                            <li>اللحوم الخالية من الدهون</li>
+                            <li>الأسماك والدواجن</li>
+                            <li>البقوليات</li>
+                            <li>ضرورية لبناء العضلات</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="food-group-card">
+                        <h4>🥛 منتجات الألبان</h4>
+                        <ul>
+                            <li>الحليب قليل الدسم</li>
+                            <li>الزبادي</li>
+                            <li>الجبن الصحي</li>
+                            <li>مصدر الكالسيوم والبروتين</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Dos and Don'ts -->
+                <h3 style="color: #2c3e50; margin: 30px 0 20px; text-align: center; font-size: 1.5em;">
+                    المسموح والممنوع عند إعداد الطعام
+                </h3>
+                
+                <div class="dos-donts-section">
+                    <div class="dos-box">
+                        <h3>
+                            <span>✅</span>
+                            المسموح
+                        </h3>
+                        <ul>
+                            <li>غسل اليدين جيداً قبل لمس الطعام</li>
+                            <li>تنظيف الخضار والفواكه بماء جاري</li>
+                            <li>استخدام أدوات منفصلة للحوم والخضار</li>
+                            <li>طهي الطعام جيداً حتى درجة حرارة آمنة</li>
+                            <li>التخزين السريع في الثلاجة</li>
+                            <li>استخدام الزيوت الصحية  مثل (زيت الزيتون)</li>
+                            <li>تقديم وجبات متوازنة</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="donts-box">
+                        <h3>
+                            <span>❌</span>
+                            الممنوع
+                        </h3>
+                        <ul>
+                            <li>ترك الطعام مكشوفاً لفترات طويلة</li>
+                            <li>إعادة تسخين الأكل أكثر من مرة</li>
+                            <li>استخدام زيت القلي أكثر من مرة</li>
+                            <li>الإفراط في الملح والسكر</li>
+                            <li>الوجبات المقلية باستمرار</li>
+                            <li>استخدام أدوات مطبخ متسخة</li>
+                            <li>إهمال تاريخ الصلاحية</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Dangerous Practices -->
+                <div class="warning-box">
+                    <h3>
+                        <span>⚠️</span>
+                        ممارسات خطيرة يجب تجنبها
+                    </h3>
+                    
+                    <div class="danger-cards">
+                        <div class="danger-card">
+                            <h4>🛑 الأكياس البلاستيكية</h4>
+                            <p>تجنب خبز اللحوم في أكياس بلاستيكية - تطلق مواد كيميائية ضارة عند التعرض للحرارة</p>
+                        </div>
+                        
+                        <div class="danger-card">
+                            <h4>🛑 ورق الألمنيوم</h4>
+                            <p>لا تستخدمه مع الأطعمة الحمضية أو المالحة - ينتقل للطعام ويسبب مخاطر صحية</p>
+                        </div>
+                        
+                        <div class="danger-card">
+                            <h4>🛑 الملاعق البلاستيكية</h4>
+                            <p>تجنبها عند الحرارة العالية - استخدم ملاعق خشبية أو ستانلس ستيل</p>
+                        </div>
+                        
+                        <div class="danger-card">
+                            <h4>🛑 تخطي المؤقت</h4>
+                            <p>استخدم المؤقت دائماً لضبط وقت الطهي وتجنب نمو البكتيريا</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Child Involvement -->
+                <div class="involvement-box">
+                    <h3>
+                        <span>👶</span>
+                        إشراك الأطفال في إعداد الطعام
+                    </h3>
+                    
+                    <div class="involvement-grid">
+                        <div class="involvement-item">
+                            <div class="icon">🧺</div>
+                            <p>اختيار الخضار من السوق</p>
+                        </div>
+                        
+                        <div class="involvement-item">
+                            <div class="icon">🔪</div>
+                            <p>المشاركة في تقطيع الفواكه</p>
+                        </div>
+                        
+                        <div class="involvement-item">
+                            <div class="icon">🥪</div>
+                            <p>تحضير السندويتشات</p>
+                        </div>
+                        
+                        <div class="involvement-item">
+                            <div class="icon">🧼</div>
+                            <p>غسل الخضروات</p>
+                        </div>
+                        
+                        <div class="involvement-item">
+                            <div class="icon">🎨</div>
+                            <p>تشكيل الأطعمة بطرق جذابة</p>
+                        </div>
+                        
+                        <div class="involvement-item">
+                            <div class="icon">❤️</div>
+                            <p>تنمية حب الطعام الصحي</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress -->
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9em;">
+                    المشهد 3 من 5 | التقدم: 60%
+                </p>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="navigation-section">
+                <a href="mom-scene2.html" class="nav-btn">
+                    <span>⏮️</span>
+                    المشهد السابق
+                </a>
+                
+                <div class="scene-info">
+                    <strong>المشهد الحالي: الثالث</strong>
+                    <br>
+                    <small>مدة المشاهدة: 12 دقيقة</small>
+                </div>
+                
+                <a href="mom-scene4.html" class="nav-btn">
+                    <span>المشهد التالي</span>
+                    <span>⏭️</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoIframe = document.querySelector('.video-iframe');
+            const loadingDiv = document.querySelector('.video-loading');
+            
+            videoIframe.addEventListener('load', function() {
+                loadingDiv.style.display = 'none';
+            });
+            
+            // تتبع وقت المشاهدة
+            let watchTime = 0;
+            const watchInterval = setInterval(() => {
+                watchTime += 1;
+                if (watchTime >= 60) {
+                    
+                }
+            }, 1000);
+            
+            window.addEventListener('beforeunload', function() {
+                clearInterval(watchInterval);
+            });
+            
+            // تأثيرات الأزرار
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.05)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غير متصل - منصة التعلم التفاعلي</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        .offline-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1);
+        }
+        
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .offline-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .offline-message {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .offline-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            border-color: transparent;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #38f9d7, #43e97b);
+            color: white;
+        }
+        
+        .offline-features {
+            margin-top: 40px;
+            text-align: right;
+        }
+        
+        .offline-features h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            .offline-container {
+                padding: 40px 25px;
+            }
+            
+            .offline-title {
+                font-size: 2rem;
+            }
+            
+            .offline-message {
+                font-size: 1.1rem;
+            }
+            
+            .offline-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1 class="offline-title">غير متصل بالإنترنت</h1>
+        <p class="offline-message">
+            عذراً، يبدو أنك غير متصل بالإنترنت حالياً. لا تقلق، يمكنك الاستمرار في استخدام بعض ميزات التطبيق دون اتصال!
+        </p>
+        
+        <div class="offline-actions">
+            <button class="btn btn-primary" onclick="checkConnection()">🔄 إعادة المحاولة</button>
+            <a href="/" class="btn">🏠 الصفحة الرئيسية</a>
+            <button class="btn" onclick="goBack()">⬅️ العودة</button>
+        </div>
+        
+        <div class="offline-features">
+            <h3>الميزات المتاحة دون اتصال:</h3>
+            <ul class="feature-list">
+                <li>الألعاب المحفوظة مسبقاً</li>
+                <li>البيانات والإحصائيات المحلية</li>
+                <li>الإعدادات والتفضيلات</li>
+                <li>التقدم المحفوظ في الألعاب</li>
+                <li>الوضع المظلم والفاتح</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        function checkConnection() {
+            if (navigator.onLine) {
+                // إعادة تحميل الصفحة إذا عاد الاتصال
+                window.location.reload();
+            } else {
+                // إظهار رسالة أن الاتصال ما زال غير متاح
+                showMessage('لا يزال الاتصال غير متاح. سيتم إعادة المحاولة تلقائياً عند عودة الاتصال.');
+            }
+        }
+        
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        }
+        
+        function showMessage(text) {
+            // إنشاء رسالة مؤقتة
+            const message = document.createElement('div');
+            message.textContent = text;
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 1000;
+                font-family: 'Cairo', sans-serif;
+                text-align: center;
+                max-width: 90%;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.parentNode.removeChild(message);
+                }
+            }, 3000);
+        }
+        
+        // مراقبة حالة الاتصال
+        window.addEventListener('online', function() {
+            showMessage('تم استعادة الاتصال! سيتم إعادة التحميل...');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        });
+        
+        window.addEventListener('offline', function() {
+            showMessage('تم فقدان الاتصال بالإنترنت');
+        });
+        
+        // محاولة إعادة الاتصال كل 30 ثانية
+        setInterval(function() {
+            if (navigator.onLine) {
+                // إذا عاد الاتصال، إعادة تحميل الصفحة
+                fetch('/', { method: 'HEAD', cache: 'no-cache' })
+                    .then(() => {
+                        window.location.reload();
+                    })
+                    .catch(() => {
+                        // لا يزال غير متصل
+                    });
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار تأثير السمنة على الجسم</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+       .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --bg-dark: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #450a0a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(239, 68, 68, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(245, 158, 11, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgMove 15s ease-in-out infinite;
+    }
+    
+    @keyframes bgMove {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.6s ease-out;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+      animation: headerShimmer 4s infinite;
+    }
+    
+    @keyframes headerShimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      font-size: 72px;
+      margin-bottom: 16px;
+      animation: pulse 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .title {
+      font-size: 40px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--danger), var(--warning), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      animation: glow 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.4)); }
+      50% { filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.6)); }
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.6s ease-out 0.1s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .score-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.1));
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .score-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    }
+
+    .score-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .score-value {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .score-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .questions-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.6s ease-out;
+      animation-fill-mode: both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--danger), var(--warning));
+      opacity: 0.6;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .organ-icon {
+      font-size: 48px;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .question-content {
+      flex: 1;
+    }
+
+    .question-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--warning);
+      margin-bottom: 16px;
+    }
+
+    .options-container {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .option-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.1));
+      border: 3px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: right;
+      font-family: 'Cairo', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .option-btn:hover::before {
+      left: 100%;
+    }
+
+    .option-btn:hover {
+      transform: translateX(-6px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+      border-color: var(--info);
+    }
+
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .option-btn.correct {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(34, 197, 94, 0.2));
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+      animation: correctPulse 0.6s ease-out;
+    }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .option-btn.wrong {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.15));
+      border-color: var(--danger);
+      animation: wrongShake 0.6s ease-out;
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .result-message {
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.8;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-message.show {
+      display: block;
+    }
+
+    .result-message.correct {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.1));
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      color: var(--primary);
+    }
+
+    .result-message.wrong {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+      border: 2px solid rgba(239, 68, 68, 0.4);
+      color: var(--danger);
+    }
+
+    .reset-btn {
+      background: linear-gradient(135deg, var(--purple), #7c3aed);
+      border: none;
+      border-radius: 18px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: 900;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      font-family: 'Cairo', sans-serif;
+      display: block;
+      margin: 24px auto 0;
+    }
+
+    .reset-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.6);
+    }
+
+    .info-section {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.05));
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 20px;
+      padding: 24px;
+      margin-top: 24px;
+      animation: fadeIn 0.6s ease-out 0.5s both;
+    }
+
+    .info-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--danger);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+      border-color: var(--danger);
+    }
+
+    .info-card-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .info-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--warning);
+      margin-bottom: 8px;
+    }
+
+    .info-card-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .logo {
+        font-size: 56px;
+      }
+
+      .question-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .score-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../games.html" class="back-button">العودة إلى قائمة الألعاب</a>
+    <div class="header">
+      <div class="logo">⚠️</div>
+      <h1 class="title">اختبار تأثير السمنة على الجسم</h1>
+      <p class="subtitle">
+        تعرف على المخاطر الصحية للسمنة وتأثيرها على أعضاء الجسم المختلفة<br>
+        اختبر معلوماتك وتعلم كيف تحمي صحتك!
+      </p>
+    </div>
+
+    <div class="score-card">
+      <div class="score-grid">
+        <div class="score-box">
+          <div class="score-icon">✅</div>
+          <div class="score-value" id="correctCount">0</div>
+          <div class="score-label">إجابات صحيحة</div>
+        </div>
+        <div class="score-box">
+          <div class="score-icon">❌</div>
+          <div class="score-value" id="wrongCount">0</div>
+          <div class="score-label">إجابات خاطئة</div>
+        </div>
+        <div class="score-box">
+          <div class="score-icon">📊</div>
+          <div class="score-value" id="totalAnswered">0</div>
+          <div class="score-label">إجمالي الإجابات</div>
+        </div>
+        <div class="score-box">
+          <div class="score-icon">🎯</div>
+          <div class="score-value" id="accuracy">0%</div>
+          <div class="score-label">نسبة الدقة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="questions-grid" id="questionsGrid"></div>
+
+    <button class="reset-btn" id="resetBtn">
+      🔄 ابدا الاختبار
+    </button>
+
+    <div class="info-section">
+      <div class="info-title">
+        <span>💡</span>
+        <span>معلومات مهمة عن السمنة</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-icon">❤️</div>
+          <div class="info-card-title">القلب والأوعية الدموية</div>
+          <div class="info-card-text">
+            السمنة تزيد من ضغط الدم، الكوليسترول، وخطر الإصابة بأمراض القلب والجلطات
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🍖</div>
+          <div class="info-card-title">الكبد</div>
+          <div class="info-card-text">
+            تراكم الدهون في الكبد يمكن أن يسبب الكبد الدهني وقد يتطور لتليف الكبد
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🦴</div>
+          <div class="info-card-title">المفاصل والعظام</div>
+          <div class="info-card-text">
+            الوزن الزائد يضع ضغطاً إضافياً على المفاصل مما يسبب التهابات وآلام مزمنة
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🫁</div>
+          <div class="info-card-title">الجهاز التنفسي</div>
+          <div class="info-card-text">
+            السمنة تسبب ضيق التنفس، انقطاع النفس أثناء النوم، وصعوبة في التنفس
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🩸</div>
+          <div class="info-card-title">السكري</div>
+          <div class="info-card-text">
+            السمنة هي السبب الرئيسي لمقاومة الإنسولين والإصابة بالسكري من النوع الثاني
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🧠</div>
+          <div class="info-card-title">الصحة النفسية</div>
+          <div class="info-card-text">
+            السمنة قد تؤثر على الثقة بالنفس وتزيد من خطر الاكتئاب والقلق
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // البيانات الأساسية للأسئلة
+    const QUESTIONS_BASE = [
+      {
+        id: 'heart',
+        icon: '❤️',
+        title: 'القلب والأوعية الدموية',
+        question: 'ما هو تأثير السمنة على القلب والأوعية الدموية؟',
+        correctAnswer: 'تزيد من ضغط الدم ومخاطر الجلطات وأمراض القلب',
+        wrongAnswers: [
+          'تحسن من كفاءة القلب وتقوي الأوعية الدموية',
+          'ليس لها أي تأثير على القلب',
+          'تقلل من خطر الإصابة بأمراض القلب'
+        ],
+        explanation: 'السمنة تزيد من عبء العمل على القلب، ترفع ضغط الدم والكوليسترول، وتزيد بشكل كبير من خطر الإصابة بأمراض القلب والجلطات.'
+      },
+      {
+        id: 'liver',
+        icon: '🍖',
+        title: 'الكبد',
+        question: 'كيف تؤثر السمنة على الكبد؟',
+        correctAnswer: 'قد تسبب الكبد الدهني وتليف الكبد',
+        wrongAnswers: [
+          'تحسن من وظائف الكبد',
+          'لا علاقة للسمنة بصحة الكبد',
+          'تساعد الكبد على التخلص من السموم'
+        ],
+        explanation: 'تراكم الدهون في الكبد (الكبد الدهني) هو أحد أخطر مضاعفات السمنة، وقد يتطور إلى التهاب وتليف كبدي.'
+      },
+      {
+        id: 'joints',
+        icon: '🦴',
+        title: 'المفاصل والعظام',
+        question: 'ما تأثير السمنة على المفاصل؟',
+        correctAnswer: 'تزيد الحمل والضغط وتسبب آلام والتهابات مزمنة',
+        wrongAnswers: [
+          'تقوي المفاصل وتحسن حركتها',
+          'لا تؤثر على المفاصل نهائياً',
+          'تساعد على بناء غضاريف جديدة'
+        ],
+        explanation: 'الوزن الزائد يضع ضغطاً كبيراً على المفاصل خاصة الركبتين والوركين، مما يسبب التآكل والالتهاب والألم المزمن.'
+      },
+      {
+        id: 'lungs',
+        icon: '🫁',
+        title: 'الجهاز التنفسي',
+        question: 'كيف تؤثر السمنة على التنفس؟',
+        correctAnswer: 'تسبب ضيق التنفس وانقطاع النفس أثناء النوم',
+        wrongAnswers: [
+          'تحسن من سعة الرئتين',
+          'لا تؤثر على الجهاز التنفسي',
+          'تزيد من كفاءة التنفس'
+        ],
+        explanation: 'السمنة تضغط على الحجاب الحاجز والرئتين، مما يسبب صعوبة في التنفس، ويزيد من خطر انقطاع النفس الانسدادي أثناء النوم.'
+      },
+      {
+        id: 'diabetes',
+        icon: '🩸',
+        title: 'السكري',
+        question: 'ما العلاقة بين السمنة والسكري؟',
+        correctAnswer: 'السمنة هي السبب الرئيسي للسكري من النوع الثاني',
+        wrongAnswers: [
+          'السمنة تحمي من الإصابة بالسكري',
+          'لا علاقة بينهما',
+          'السمنة تعالج السكري'
+        ],
+        explanation: 'السمنة تسبب مقاومة الإنسولين، مما يجعل الجسم غير قادر على استخدام السكر بشكل فعال، وهذا هو السبب الرئيسي للسكري من النوع الثاني.'
+      },
+      {
+        id: 'pressure',
+        icon: '💉',
+        title: 'ضغط الدم',
+        question: 'تأثير السمنة على ضغط الدم؟',
+        correctAnswer: 'ترفع ضغط الدم وتزيد خطر ارتفاعه المزمن',
+        wrongAnswers: [
+          'تخفض ضغط الدم',
+          'تحافظ على ضغط الدم طبيعياً',
+          'لا تؤثر على ضغط الدم'
+        ],
+        explanation: 'الدهون الزائدة تجبر القلب على العمل بجهد أكبر لضخ الدم، مما يرفع ضغط الدم ويزيد من خطر الإصابة بارتفاع الضغط المزمن.'
+      },
+      {
+        id: 'cancer',
+        icon: '🎗️',
+        title: 'السرطان',
+        question: 'هل السمنة تزيد من خطر الإصابة بالسرطان؟',
+        correctAnswer: 'نعم، تزيد من خطر عدة أنواع من السرطان',
+        wrongAnswers: [
+          'لا، لا علاقة بين السمنة والسرطان',
+          'السمنة تحمي من السرطان',
+          'فقط في حالات نادرة جداً'
+        ],
+        explanation: 'الدراسات أثبتت أن السمنة تزيد من خطر الإصابة بأنواع متعددة من السرطان مثل سرطان الثدي، القولون، الكبد، والبنكرياس.'
+      },
+      {
+        id: 'mental',
+        icon: '🧠',
+        title: 'الصحة النفسية',
+        question: 'كيف تؤثر السمنة على الصحة النفسية؟',
+        correctAnswer: 'قد تسبب الاكتئاب، القلق، وانخفاض الثقة بالنفس',
+        wrongAnswers: [
+          'تحسن من الصحة النفسية دائماً',
+          'لا تؤثر على الحالة النفسية',
+          'تزيد من السعادة والرضا عن النفس'
+        ],
+        explanation: 'السمنة قد تؤثر سلباً على الصحة النفسية بسبب التنمر، نظرة المجتمع، والتحديات الصحية، مما يزيد من خطر الاكتئاب والقلق.'
+      }
+    ];
+
+    // دالة لخلط المصفوفة بشكل عشوائي
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    // إنشاء الأسئلة مع خلط الخيارات
+    const QUESTIONS = QUESTIONS_BASE.map(q => {
+      const allOptions = [q.correctAnswer, ...q.wrongAnswers];
+      const shuffledOptions = shuffleArray(allOptions);
+      const correctIndex = shuffledOptions.indexOf(q.correctAnswer);
+      
+      return {
+        id: q.id,
+        icon: q.icon,
+        title: q.title,
+        question: q.question,
+        options: shuffledOptions,
+        correct: correctIndex,
+        explanation: q.explanation
+      };
+    });
+
+    let stats = {
+      correct: 0,
+      wrong: 0,
+      answered: new Set()
+    };
+
+    function updateStats() {
+      document.getElementById('correctCount').textContent = stats.correct;
+      document.getElementById('wrongCount').textContent = stats.wrong;
+      const total = stats.correct + stats.wrong;
+      document.getElementById('totalAnswered').textContent = total;
+      
+      const accuracy = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+      document.getElementById('accuracy').textContent = accuracy + '%';
+    }
+
+    function handleAnswer(questionIndex, selectedIndex) {
+      const question = QUESTIONS[questionIndex];
+      const isCorrect = selectedIndex === question.correct;
+      
+      // تحديث الإحصائيات
+      if (!stats.answered.has(questionIndex)) {
+        stats.answered.add(questionIndex);
+        if (isCorrect) {
+          stats.correct++;
+        } else {
+          stats.wrong++;
+        }
+        updateStats();
+      }
+
+      // تعطيل جميع الأزرار
+      const buttons = document.querySelectorAll(`[data-question="${questionIndex}"]`);
+      buttons.forEach(btn => btn.disabled = true);
+
+      // تحديد الإجابة المختارة والصحيحة
+      buttons.forEach((btn, idx) => {
+        if (idx === selectedIndex) {
+          btn.classList.add(isCorrect ? 'correct' : 'wrong');
+        }
+        if (idx === question.correct && !isCorrect) {
+          btn.classList.add('correct');
+        }
+      });
+
+      // عرض رسالة النتيجة
+      const resultEl = document.getElementById(`result-${questionIndex}`);
+      resultEl.classList.add('show', isCorrect ? 'correct' : 'wrong');
+      
+      if (isCorrect) {
+        resultEl.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span style="font-size: 24px;">✅</span>
+            <strong>إجابة صحيحة! أحسنت!</strong>
+          </div>
+          <div>${question.explanation}</div>
+        `;
+      } else {
+        resultEl.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span style="font-size: 24px;">❌</span>
+            <strong>إجابة خاطئة، لكن تعلمت شيئاً جديداً!</strong>
+          </div>
+          <div>${question.explanation}</div>
+        `;
+      }
+    }
+
+    function renderQuestions() {
+      const grid = document.getElementById('questionsGrid');
+      
+      grid.innerHTML = QUESTIONS.map((q, index) => `
+        <div class="question-card" style="animation-delay: ${index * 0.1}s">
+          <div class="question-header">
+            <div class="organ-icon">${q.icon}</div>
+            <div class="question-content">
+              <div class="question-title">${q.title}</div>
+              <div class="question-text">${q.question}</div>
+            </div>
+          </div>
+          
+          <div class="options-container">
+            ${q.options.map((option, optIndex) => `
+              <button 
+                class="option-btn" 
+                data-question="${index}" 
+                data-option="${optIndex}"
+                onclick="handleAnswer(${index}, ${optIndex})"
+              >
+                ${option}
+              </button>
+            `).join('')}
+          </div>
+          
+          <div class="result-message" id="result-${index}"></div>
+        </div>
+      `).join('');
+    }
+
+    function resetQuiz() {
+      if (confirm('هل تريد إعادة الاختبار؟ سيتم مسح جميع الإجابات وخلط الأسئلة من جديد.')) {
+        // إعادة خلط الأسئلة
+        QUESTIONS.length = 0;
+        QUESTIONS.push(...QUESTIONS_BASE.map(q => {
+          const allOptions = [q.correctAnswer, ...q.wrongAnswers];
+          const shuffledOptions = shuffleArray(allOptions);
+          const correctIndex = shuffledOptions.indexOf(q.correctAnswer);
+          
+          return {
+            id: q.id,
+            icon: q.icon,
+            title: q.title,
+            question: q.question,
+            options: shuffledOptions,
+            correct: correctIndex,
+            explanation: q.explanation
+          };
+        }));
+        
+        stats = {
+          correct: 0,
+          wrong: 0,
+          answered: new Set()
+        };
+        updateStats();
+        renderQuestions();
+      }
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+
+  </script>
+</body>
+</html>

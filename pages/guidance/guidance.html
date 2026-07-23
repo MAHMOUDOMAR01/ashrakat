@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرشادات الاستخدام - منصة التعلم التفاعلي</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap');
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* رأس الصفحة */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* شبكة البطاقات */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f3f4;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-left: 15px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2c3e50;
+        }
+
+        .card-list {
+            list-style: none;
+        }
+
+        .card-list li {
+            margin: 15px 0;
+            padding: 12px 0;
+            color: #34495e;
+            font-weight: 500;
+            position: relative;
+            padding-right: 25px;
+        }
+
+        .card-list li::before {
+            content: '✨';
+            position: absolute;
+            right: 0;
+            top: 12px;
+        }
+
+        /* القسم الرئيسي */
+        .main-section {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .steps-list {
+            list-style: none;
+        }
+
+        .steps-list li {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .steps-list li:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateX(-5px);
+        }
+
+        /* نصيحة مميزة */
+        .tip-box {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        /* أزرار التنقل */
+        .navigation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        /* شريط علوي مختصر للرجوع */
+        .top-bar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 6px 18px rgba(25, 118, 210, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .back-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(25, 118, 210, 0.4);
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .nav-btn.home { background: linear-gradient(135deg, #2196F3, #1976D2); }
+        .nav-btn.games { background: linear-gradient(135deg, #FF9800, #F57C00); }
+        .nav-btn.videos { background: linear-gradient(135deg, #E91E63, #C2185B); }
+
+        /* تحسينات الجوال */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .main-section {
+                padding: 25px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+
+        /* تأثيرات بسيطة */
+        .card, .main-section, .nav-btn {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <a class="back-home" href="../main/home.html">🏠 الرجوع للصفحة الرئيسية</a>
+        </div>
+        <header class="header">
+            <h1 class="title">📖 إرشادات الاستخدام</h1>
+            <p class="subtitle">دليل بسيط وواضح لاستخدام منصة التعلم بأفضل طريقة ممكنة</p>
+        </header>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🧒</span>
+                    <h2 class="card-title">للأطفال</h2>
+                </div>
+                <ul class="card-list">
+                    <li>ابدأ من الصفحة الرئيسية واختر ما تريد تعلمه</li>
+                    <li>اقرأ السؤال بعناية قبل اختيار الإجابة</li>
+                    <li>لا تخف من الأخطاء - هي جزء من التعلم</li>
+                    <li>استخدم زر "رجوع" للانتقال بين الصفحات</li>
+                    <li>استمتع واقضِ وقتاً ممتعاً في التعلم</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">👨‍👩‍👧‍👦</span>
+                    <h2 class="card-title">لأولياء الأمور</h2>
+                </div>
+                <ul class="card-list">
+                    <li>اكتشفوا المنصة مع أطفالكم من البداية</li>
+                    <li>حددوا وقتاً يومياً ثابتاً للتعلم</li>
+                    <li>شجعوا الطفل وامدحوه عند كل تقدم</li>
+                    <li>شاركونا آرائكم لتحسين المنصة</li>
+                    <li>تابعوا تقدم الطفل وناقشوا ما تعلمه</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🛡️</span>
+                    <h2 class="card-title">الاستخدام الآمن</h2>
+                </div>
+                <ul class="card-list">
+                    <li>اختاروا المحتوى المناسب لعمر الطفل</li>
+                    <li>خذوا استراحة كل 20 دقيقة</li>
+                    <li>استخدموا المنصة في مكان مضاء جيداً</li>
+                    <li>أنهوا الاستخدام قبل وقت النوم بساعة</li>
+                    <li>تأكدوا من وضعية جلوس مريحة</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🎥</span>
+                    <h2 class="card-title">مشاهدة الفيديوهات</h2>
+                </div>
+                <ul class="card-list">
+                    <li>اختاروا القسم المناسب لكم</li>
+                    <li>ابدأوا بالفيديوهات القصيرة</li>
+                    <li>ناقشوا المحتوى مع الطفل بعد المشاهدة</li>
+                    <li>طبقوا النصائح في الحياة اليومية</li>
+                    <li>كرروا مشاهدة الفيديوهات المفيدة</li>
+                </ul>
+            </div>
+        </div>
+
+        <section class="main-section">
+            <h2 class="section-title">🚀 خطوات البدء</h2>
+            <ul class="steps-list">
+                <li>افتحوا الصفحة الرئيسية وتعرفوا على الأقسام المختلفة</li>
+                <li>اختاروا نشاطاً واحداً للتجربة - لعبة بسيطة أو فيديو قصير</li>
+                <li>ضعوا هدفاً صغيراً يومياً مثل: نشاطين فقط يومياً</li>
+                <li>اختتموا كل جلسة بسؤال: "ما الذي تعلمناه اليوم؟"</li>
+                <li>احتفلوا بالإنجازات الصغيرة وشجعوا المواصلة</li>
+            </ul>
+            
+            <div class="tip-box">
+                💡 نصيحة مهمة: الانتظام أهم من الكمية - خمس دقائق يومياً أفضل من ساعة أسبوعياً
+            </div>
+        </section>
+
+        <nav class="navigation">
+            <a href="../main/home.html" class="nav-btn home">
+                <span>🏠</span>
+                الصفحة الرئيسية
+            </a>
+            <a href="../main/games.html" class="nav-btn games">
+                <span>🎮</span>
+                الألعاب التعليمية
+            </a>
+            <a href="../videos/videos.html" class="nav-btn videos">
+                <span>🎥</span>
+                مكتبة الفيديوهات
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // تأثيرات بسيطة وسلسة
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const section = document.querySelector('.main-section');
+            
+            // تأثير تدريجي للبطاقات
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // تأثير hover للبطاقات
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // تأثير للأزرار
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // تأثير النقر
+                    this.style.transform = 'translateY(-1px) scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+            
+            // تأثير للعناصر في القائمة
+            const listItems = document.querySelectorAll('.card-list li, .steps-list li');
+            listItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.paddingRight = '30px';
+                    this.style.background = 'rgba(33, 150, 243, 0.1)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.paddingRight = '25px';
+                    this.style.background = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

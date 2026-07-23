@@ -1,0 +1,787 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المشهد الثاني - دور أولياء الأمور والغذاء المتوازن</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* تقليل الحركة عند طلب المستخدم */
+        @media (prefers-reduced-motion: reduce) {
+            .video-section,
+            .pillar-card,
+            .feature-item,
+            .benefit-badge,
+            .nav-btn {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover {
+            background: #e8eaf6;
+            transform: translateY(-2px);
+        }
+        
+        /* Video Section Styles */
+        .video-section {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .video-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .video-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .video-container {
+            position: relative;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+        
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        /* Description Styles */
+        .video-description {
+            padding: 30px;
+            background: white;
+        }
+        
+        .description-title {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .description-content {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        
+        /* Parents Role Box */
+        .parents-role-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .parents-role-box h3 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+        
+        .parents-role-box p {
+            line-height: 1.8;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+        }
+        
+        /* Four Pillars Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .pillar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border-top: 5px solid;
+        }
+        
+        .pillar-card:nth-child(1) {
+            border-top-color: #4CAF50;
+        }
+        
+        .pillar-card:nth-child(2) {
+            border-top-color: #FF9800;
+        }
+        
+        .pillar-card:nth-child(3) {
+            border-top-color: #2196F3;
+        }
+        
+        .pillar-card:nth-child(4) {
+            border-top-color: #E91E63;
+        }
+        
+        .pillar-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pillar-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .pillar-title {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .pillar-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pillar-content li {
+            color: #555;
+            padding: 10px 0 10px 25px;
+            position: relative;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        
+        /* Balanced Diet Section */
+        .balanced-diet-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .balanced-diet-box h3 {
+            color: #d84315;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+        
+        .balanced-diet-box .definition {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.8;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateX(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-item h4 {
+            color: #d84315;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        /* Breakfast Importance */
+        .breakfast-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .breakfast-box h3 {
+            color: #00695c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+        
+        .breakfast-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .breakfast-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .breakfast-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .benefit-badge {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 40%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Navigation Section */
+        .navigation-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-btn.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .scene-info {
+            text-align: center;
+            color: #666;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .video-container {
+                padding: 20px;
+            }
+            
+            .video-placeholder {
+                height: 300px;
+            }
+            
+            .video-title {
+                font-size: 1.5em;
+            }
+            
+            .navigation-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .breakfast-benefits {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="logo">👨‍👩‍👧‍👦 المشهد الثاني - قسم الأم</div>
+            <div class="nav-links">
+                <a href="mom.html">🔙 قائمة المشاهد</a>
+                <a href="../videos/videos.html">🎥 قسم الفيديوهات</a>
+                <a href="../main/home.html">🏠 الرئيسية</a>
+            </div>
+        </nav>
+        
+        <!-- Video Section -->
+        <div class="video-section">
+            <!-- Video Header -->
+            <div class="video-header">
+                <h1 class="video-title">🎬 المشهد الثاني</h1>
+                <p class="video-subtitle">دور أولياء الأمور والغذاء المتوازن</p>
+            </div>
+            
+            <!-- Video Container -->
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <iframe class="video-iframe" 
+                            src="https://drive.google.com/file/d/1qnkYeHm_Uy9BFnDQGZE4s07FaNdhNkTF/preview" 
+                            title="المشهد الثاني - دور أولياء الأمور والغذاء المتوازن"
+                            loading="lazy" allow="autoplay; fullscreen" allowfullscreen>
+                    </iframe>
+                    <div class="video-loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري تحميل الفيديو...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Description -->
+            <div class="video-description">
+                <h2 class="description-title">
+                    <span>📚</span>
+                    وصف المشهد
+                </h2>
+                <p class="description-content">
+                    في هذا المشهد الثاني، نستعرض الدور المحوري الذي يلعبه <strong>أولياء الأمور</strong> في تشكيل العادات الغذائية الصحية لأطفالهم. 
+                    كما نتناول مفهوم <strong>الغذاء المتوازن</strong> وأهميته في نمو الطفل وتطوره، مع التركيز الخاص على أهمية وجبة الإفطار للأطفال المصابين بزيادة الوزن والسمنة.
+                </p>
+                
+                <!-- Parents Role Box -->
+                <div class="parents-role-box">
+                    <h3>
+                        <span>👨‍👩‍👧</span>
+                        دور الوالدين الأساسي
+                    </h3>
+                    <p>
+                        <strong>الوالدين هما العامل الأهم</strong> في تشكيل عادات الطفل الغذائية منذ الصغر، فالبيت هو المدرسة الأولى التي يكتسب منها الطفل سلوكياته. 
+                        فهم المسؤولون عن تزويده بالغذاء الصحي، وتحديد نوعية الطعام، كما أن وعيهم بمبادئ التغذية الصحية ينعكس مباشرة على صحته.
+                    </p>
+                    <p>
+                        وفي المقابل، فإن ضعف هذا الوعي قد يؤدي إلى زيادة الوزن والسمنة. لذا، فإن دور الوالدين محوري في غرس أنماط غذائية صحية وتشجيع النشاط البدني، 
+                        بما يضمن نمط حياة أفضل للطفل.
+                    </p>
+                </div>
+                
+                <!-- Four Pillars -->
+                <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 1.4em;">
+                    <span>🏛️</span>
+                    الأركان الأربعة لدور الوالدين
+                </h3>
+                
+                <div class="pillars-grid">
+                    <!-- Pillar 1 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">🥗</div>
+                        <h4 class="pillar-title">أولاً: توفير بيئة غذائية صحية</h4>
+                        <div class="pillar-content">
+                            <ul>
+                                <li>تقديم وجبات متوازنة غنية بالخضروات والفواكه والحبوب الكاملة والبروتينات</li>
+                                <li>تقليل الأطعمة غير الصحية والوجبات السريعة</li>
+                                <li>تجنب استخدام الطعام كوسيلة للمكافأة أو العقاب</li>
+                                <li>تقليل المشروبات الغازية والعصائر المعلبة</li>
+                                <li>تشجيع استهلاك الماء كخيار أساسي</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Pillar 2 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">🏃‍♂️</div>
+                        <h4 class="pillar-title">ثانياً: تعزيز النشاط البدني</h4>
+                        <div class="pillar-content">
+                            <ul>
+                                <li>تشجيع ممارسة الرياضة لمدة لا تقل عن 60 دقيقة يوميًا</li>
+                                <li>تنظيم أنشطة عائلية مثل المشي وركوب الدراجات</li>
+                                <li>اللعب في الحديقة والأنشطة الحركية المختلفة</li>
+                                <li>تقليل وقت الجلوس أمام الشاشات لأقل من ساعتين يوميًا</li>
+                                <li>المشاركة في برامج النشاط البدني الأسرية</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Pillar 3 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">👥</div>
+                        <h4 class="pillar-title">ثالثاً: مشاركة الأسرة في العادات الصحية</h4>
+                        <div class="pillar-content">
+                            <ul>
+                                <li>التزام الوالدين بعادات غذائية صحية ونشاط بدني منتظم</li>
+                                <li>كونوا نموذجًا يحتذي به الأطفال</li>
+                                <li>إشراك الأطفال في إعداد الطعام الصحي</li>
+                                <li>زيادة وعيهم بالتغذية المتوازنة</li>
+                                <li>اتباع منهج قائم على النظام الأسري</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Pillar 4 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon">💝</div>
+                        <h4 class="pillar-title">رابعاً: الدعم النفسي وتعزيز الثقة بالنفس</h4>
+                        <div class="pillar-content">
+                            <ul>
+                                <li>تجنب السخرية أو التعليقات السلبية على شكل الطفل</li>
+                                <li>التركيز على الصحة والنشاط بدلاً من الوزن وحده</li>
+                                <li>تعزيز حب الذات وتقديرها</li>
+                                <li>تقليل خطر الاضطرابات النفسية المرتبطة بالسمنة</li>
+                                <li>دعم الصورة الذاتية الإيجابية للطفل</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Balanced Diet -->
+                <div class="balanced-diet-box">
+                    <h3>
+                        <span>⚖️</span>
+                        الغذاء المتوازن (الغذاء الصحي)
+                    </h3>
+                    <div class="definition">
+                        <strong>التعريف:</strong> يشير التوازن الغذائي إلى تناول مجموعة متنوعة من الأطعمة التي تحتوي على جميع العناصر الغذائية الضرورية بكميات مناسبة لاحتياجات الجسم. 
+                        وهو الذي يحتوي على جميع العناصر الغذائية مثل: البروتينات، والسكريات، والنشويات، والمعادن، والكربوهيدرات والماء ، لذلك يُفضّل التنويع في الأكل وعدم الاقتصار على تناول صنف واحد من الأطعمة.
+                    </div>
+                    
+                    <h4 style="color: #d84315; margin: 20px 0 15px; font-size: 1.2em;">مواصفات الغذاء المتوازن:</h4>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">📈</div>
+                            <h4>دعم النمو والتطور</h4>
+                            <p>يوفر البروتينات، الفيتامينات، والمعادن اللازمة لبناء الأنسجة والعظام والأسنان وتطور الدماغ</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🛡️</div>
+                            <h4>الوقاية من الأمراض</h4>
+                            <p>يقلل من خطر السمنة، السكري، أمراض القلب، وبعض أنواع السرطان</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">💪</div>
+                            <h4>تعزيز المناعة</h4>
+                            <p>الأطعمة الغنية بالفيتامينات والمعادن تساعد على محاربة الالتهابات</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🧠</div>
+                            <h4>تحسين الصحة النفسية</h4>
+                            <p>النظام الغذائي المتوازن يرتبط بتحسن الوظائف الإدراكية وانخفاض معدلات الاكتئاب</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">⚖️</div>
+                            <h4>الحفاظ على وزن صحي</h4>
+                            <p>التوازن بين السعرات المستهلكة والمصروفة يمنع زيادة أو فقدان الوزن غير الصحي</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Breakfast Importance -->
+                <div class="breakfast-box">
+                    <h3>
+                        <span>🍳</span>
+                        أهمية وجبة الإفطار للأطفال المصابين بزيادة الوزن و السمنة
+                    </h3>
+                    <div class="breakfast-content">
+                        <p>
+                            تُعد وجبة الإفطار من أهم الوجبات اليومية للأطفال عامةً، ولها أهمية خاصة لدى الأطفال المصابين بزيادة الوزن و السمنة. 
+                            فقد أشارت العديد من الدراسات إلى أن الانتظام في تناول وجبة الإفطار يرتبط بتحسين مؤشر كتلة الجسم، وتقليل مخاطر الإفراط في تناول الطعام على مدار اليوم.
+                        </p>
+                        
+                        <div class="breakfast-benefits">
+                            <div class="benefit-badge">
+                                📊 تنظيم مستويات الجلوكوز
+                            </div>
+                            <div class="benefit-badge">
+                                ⏰ تعزيز الشعور بالشبع
+                            </div>
+                            <div class="benefit-badge">
+                                🧠 تحسين الأداء الذهني
+                            </div>
+                            <div class="benefit-badge">
+                                📚 زيادة التركيز والانتباه
+                            </div>
+                            <div class="benefit-badge">
+                                ✅ تعزيز العادات الصحية
+                            </div>
+                            <div class="benefit-badge">
+                                🎯 التحكم في الوزن
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 20px;">
+                            <strong>الخلاصة:</strong> إدراج وجبة إفطار صحية ومتوازنة ضمن الروتين اليومي للأطفال المصابين بزيادة الوزن و السمنة يُمثل أحد الاستراتيجيات الفعّالة للتحكم في الوزن، 
+                            وتحسين الصحة العامة، ودعم النمو البدني والعقلي السليم.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9em;">
+                    المشهد 2 من 5 | التقدم: 40%
+                </p>
+            </div>
+            
+            <!-- Navigation Section -->
+            <div class="navigation-section">
+                <a href="mom-scene1.html" class="nav-btn">
+                    <span>⏮️</span>
+                    المشهد السابق
+                </a>
+                
+                <div class="scene-info">
+                    <strong>المشهد الحالي: الثاني</strong>
+                    <br>
+                    <small>مدة المشاهدة: 10 دقائق</small>
+                </div>
+                
+                <a href="mom-scene3.html" class="nav-btn">
+                    <span>المشهد التالي</span
+                    <span>⏭️</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoIframe = document.querySelector('.video-iframe');
+            const loadingDiv = document.querySelector('.video-loading');
+            
+            // إخفاء مؤشر التحميل عند تحميل الفيديو
+            videoIframe.addEventListener('load', function() {
+                loadingDiv.style.display = 'none';
+            });
+            
+            // تتبع وقت المشاهدة (اختياري)
+            let watchTime = 0;
+            const watchInterval = setInterval(() => {
+                watchTime += 1;
+                
+                
+                // يمكن إرسال هذه البيانات للتحليل
+                if (watchTime >= 60) { // بعد دقيقة واحدة
+                    
+                }
+            }, 1000);
+            
+            // إيقاف تتبع الوقت عند مغادرة الصفحة
+            window.addEventListener('beforeunload', function() {
+                clearInterval(watchInterval);
+                
+            });
+            
+            // تأثيرات بصرية للأزرار
+            document.querySelectorAll('.nav-btn:not(.disabled)').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.05)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-2px) scale(1)';
+                });
+            });
+        });
+        
+        // دالة لإنشاء رابط Google Drive صحيح
+        function createGoogleDriveEmbedUrl(fileId) {
+            return `https://drive.google.com/file/d/${fileId}/preview`;
+        }
+        
+        // مثال على كيفية استخدام الدالة:
+        // const videoId = 'YOUR_ACTUAL_VIDEO_ID_FROM_GOOGLE_DRIVE';
+        // document.querySelector('.video-iframe').src = createGoogleDriveEmbedUrl(videoId);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اختبار الصحة واللياقة الذكي</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --secondary: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgMove 15s ease-in-out infinite;
+    }
+    
+    @keyframes bgMove {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.6s ease-out;
+      text-align: center;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes iconBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .title {
+      font-size: 36px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.4)); }
+      50% { filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6)); }
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-badge {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-badge:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .stat-icon {
+      font-size: 24px;
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    .difficulty-select {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.6s ease-out 0.2s both;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .difficulty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    .difficulty-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.1));
+      border: 3px solid rgba(139, 92, 246, 0.3);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .difficulty-card::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+    
+    .difficulty-card:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .difficulty-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
+      border-color: var(--purple);
+    }
+    
+    .difficulty-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(34, 197, 94, 0.15));
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+    
+    .difficulty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .difficulty-name {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .difficulty-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .difficulty-time {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .start-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      border-radius: 20px;
+      padding: 18px 48px;
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      margin: 24px auto;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .start-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+    
+    .start-btn:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+    
+    .start-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.6);
+    }
+    
+    .start-btn span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .quiz-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .question-counter {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    
+    .timer-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+      padding: 12px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    .timer-icon {
+      font-size: 24px;
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .timer-bar {
+      width: 150px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .timer-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 999px;
+      transition: width 1s linear;
+      position: relative;
+    }
+    
+    .timer-fill.warning {
+      background: linear-gradient(90deg, var(--warning), var(--danger));
+      animation: timerWarning 0.5s ease-in-out infinite;
+    }
+    
+    @keyframes timerWarning {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .timer-text {
+      font-size: 16px;
+      font-weight: 800;
+      min-width: 45px;
+      text-align: center;
+    }
+    
+    .pause-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      border: 2px solid rgba(59, 130, 246, 0.4);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .pause-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+    
+    .pause-btn:hover::before {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .pause-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .pause-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .pause-btn.paused {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+      border-color: rgba(34, 197, 94, 0.4);
+      animation: pausePulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pausePulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.6); }
+    }
+    
+    .question-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .question-text {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    .hint-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--warning);
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .option-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.1));
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: right;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .option-btn:hover::before {
+      left: 100%;
+    }
+    
+    .option-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+      border-color: var(--secondary);
+    }
+    
+    .option-btn:active {
+      transform: translateY(-2px);
+    }
+    
+    .option-btn.correct {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(34, 197, 94, 0.2));
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+      animation: correctPulse 0.6s ease-out;
+    }
+    
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .option-btn.wrong {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.15));
+      border-color: var(--danger);
+      opacity: 0.6;
+      animation: wrongShake 0.5s ease-out;
+    }
+    
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .option-btn:disabled {
+      cursor: not-allowed;
+    }
+    
+    .skip-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    .skip-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .results-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeInScale 0.6s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .results-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: iconRotate 1s ease-out;
+    }
+    
+    @keyframes iconRotate {
+      0% { transform: scale(0) rotate(-180deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+    
+    .results-title {
+      font-size: 36px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    
+    .results-score {
+      font-size: 56px;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 24px 0;
+    }
+    
+    .results-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    
+    .result-stat {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    
+    .result-stat-value {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .result-stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .results-message {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin: 24px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+    }
+    
+    .results-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    
+    .action-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      border-radius: 16px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+    
+    .action-btn.secondary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .action-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .title {
+        font-size: 28px;
+      }
+      
+      .logo {
+        font-size: 48px;
+      }
+      
+      .difficulty-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .quiz-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .timer-bar {
+        width: 100%;
+      }
+      
+      .results-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../games.html" class="back-button">العودة إلى قائمة الألعاب</a>
+    <header class="header">
+      <div class="logo">🏋️</div>
+      <h1 class="title">اختبار الصحة واللياقة</h1>
+      <p class="subtitle">
+        اختبر معلوماتك عن الرياضة والتغذية والصحة العامة<br>
+        اختر المستوى المناسب لك وابدأ التحدي!
+      </p>
+      <div class="stats-bar">
+        <div class="stat-badge">
+          <span class="stat-icon">📚</span>
+          <div>
+            <div class="stat-value" id="totalQuestions">20</div>
+            <div class="stat-label">سؤال</div>
+          </div>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-icon">🎯</span>
+          <div>
+            <div class="stat-value" id="bestScore">-</div>
+            <div class="stat-label">أفضل نتيجة</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="difficulty-select" id="difficultyScreen">
+      <h2 class="section-title">اختر مستوى الصعوبة</h2>
+      <div class="difficulty-grid">
+        <div class="difficulty-card" data-difficulty="easy">
+          <div class="difficulty-icon">🟢</div>
+          <div class="difficulty-name">سهل</div>
+          <div class="difficulty-desc">مثالي للمبتدئين</div>
+          <div class="difficulty-time">⏱️ 25 ثانية</div>
+        </div>
+        <div class="difficulty-card selected" data-difficulty="medium">
+          <div class="difficulty-icon">🟡</div>
+          <div class="difficulty-name">متوسط</div>
+          <div class="difficulty-desc">تحدي متوازن</div>
+          <div class="difficulty-time">⏱️ 20 ثانية</div>
+        </div>
+        <div class="difficulty-card" data-difficulty="hard">
+          <div class="difficulty-icon">🔴</div>
+          <div class="difficulty-name">صعب</div>
+          <div class="difficulty-desc">للخبراء فقط!</div>
+          <div class="difficulty-time">⏱️ 15 ثانية</div>
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn">
+        <span>🚀 ابدأ الاختبار</span>
+      </button>
+    </div>
+
+    <div class="quiz-card hidden" id="quizScreen"></div>
+    
+    <div class="results-card hidden" id="resultsScreen"></div>
+  </div>
+
+  <script>
+    const DIFFICULTIES = {
+      easy: { label: 'سهل', time: 25, icon: '🟢' },
+      medium: { label: 'متوسط', time: 20, icon: '🟡' },
+      hard: { label: 'صعب', time: 15, icon: '🔴' }
+    };
+
+    const QUESTIONS = [
+      {
+        q: 'كم دقيقة من النشاط البدني المعتدل توصي به منظمة الصحة العالمية أسبوعياً؟',
+        opts: ['150 دقيقة', '60 دقيقة', '300 دقيقة', '30 دقيقة'],
+        a: 0,
+        hint: 'منظمة الصحة العالمية'
+      },
+      {
+        q: 'ما هو أفضل توزيع للتمارين الرياضية أسبوعياً؟',
+        opts: ['تمارين قوة فقط', 'تمارين قلب فقط', 'مزيج من القلب والقوة', 'لا يهم التوزيع'],
+        a: 2,
+        hint: 'التنوع مهم'
+      },
+      {
+        q: 'المشي السريع لمدة ساعة يحرق تقريباً:',
+        opts: ['50-100 سعرة حرارية', '200-300 سعرة حرارية', '500-700 سعرة حرارية', '0 سعرة'],
+        a: 1,
+        hint: 'حرق معتدل'
+      },
+      {
+        q: 'ما هو أهم عامل للاستمرار في ممارسة الرياضة؟',
+        opts: ['التوقيت المثالي', 'الأدوات الباهظة', 'الاستمرارية والانتظام', 'الحرمان من الطعام'],
+        a: 2,
+        hint: 'الثبات على الهدف'
+      },
+      {
+        q: 'كم لتر ماء يجب شرب minimum يومياً للشخص البالغ؟',
+        opts: ['0.5 لتر', '1 لتر', '2-3 لتر', '5 لتر'],
+        a: 2,
+        hint: 'الترطيب مهم'
+      },
+      {
+        q: 'ما هي أفضل وجبة قبل التمرين؟',
+        opts: ['وجبة ثقيلة', 'سكريات بسيطة فقط', 'كربوهيدرات معقدة مع بروتين خفيف', 'لا تأكل شيء'],
+        a: 2,
+        hint: 'طاقة متوازنة'
+      },
+      {
+        q: 'متى أفضل وقت لقياس الوزن؟',
+        opts: ['بعد التمرين مباشرة', 'في أي وقت', 'صباحاً قبل الأكل', 'بعد الأكل'],
+        a: 2,
+        hint: 'للحصول على قراءة دقيقة'
+      },
+      {
+        q: 'كم جرام بروتين لكل كيلو من وزن الجسم للرياضيين؟',
+        opts: ['0.5-1 جم', '1.6-2.2 جم', '3-4 جم', '0.1 جم'],
+        a: 1,
+        hint: 'البروتين مهم للعضلات'
+      },
+      {
+        q: 'ما هو مؤشر كتلة الجسم الطبيعي (BMI)؟',
+        opts: ['أقل من 18.5', '18.5-24.9', '25-29.9', 'أكثر من 30'],
+        a: 1,
+        hint: 'النطاق الصحي'
+      },
+      {
+        q: 'كم ساعة نوم يحتاج البالغ يومياً؟',
+        opts: ['4-5 ساعات', '6-7 ساعات', '7-9 ساعات', '10-12 ساعة'],
+        a: 2,
+        hint: 'النوم الجيد ضروري'
+      },
+      {
+        q: 'ما هي أفضل طريقة لخسارة الوزن بشكل صحي؟',
+        opts: ['حمية قاسية', 'عجز سعرات معتدل مع رياضة', 'تخطي الوجبات', 'أدوية التخسيس'],
+        a: 1,
+        hint: 'التوازن هو الحل'
+      },
+      {
+        q: 'متى يجب تناول البروتين بعد التمرين؟',
+        opts: ['خلال 30-60 دقيقة', 'بعد 3 ساعات', 'في نفس اللحظة', 'لا يهم التوقيت'],
+        a: 0,
+        hint: 'النافذة الابتنائية'
+      },
+      {
+        q: 'ما هي أفضل تمارين لحرق الدهون؟',
+        opts: ['تمارين عالية الكثافة HIIT', 'المشي البطيء فقط', 'تمارين البطن فقط', 'لا شيء'],
+        a: 0,
+        hint: 'الكثافة العالية فعالة'
+      },
+      {
+        q: 'كم مرة يجب ممارسة تمارين القوة أسبوعياً؟',
+        opts: ['مرة واحدة', '2-3 مرات', '7 مرات', 'لا حاجة لها'],
+        a: 1,
+        hint: 'الراحة مهمة'
+      },
+      {
+        q: 'ما هو الإحماء المناسب قبل التمرين؟',
+        opts: ['لا حاجة للإحماء', '5-10 دقائق نشاط خفيف', 'تمدد ثابت طويل', 'التمرين مباشرة'],
+        a: 1,
+        hint: 'تحضير الجسم'
+      },
+      {
+        q: 'أي من التالي يعتبر من الكربوهيدرات المعقدة؟',
+        opts: ['السكر الأبيض', 'الخبز الأبيض', 'الشوفان والأرز البني', 'المشروبات الغازية'],
+        a: 2,
+        hint: 'الحبوب الكاملة'
+      },
+      {
+        q: 'ما هي أفضل طريقة لقياس التقدم في اللياقة؟',
+        opts: ['الميزان فقط', 'مزيج من الوزن والقياسات والأداء', 'المرآة فقط', 'لا حاجة للقياس'],
+        a: 1,
+        hint: 'النظرة الشاملة'
+      },
+      {
+        q: 'كم يوم راحة تحتاج العضلات بعد تمرين القوة؟',
+        opts: ['لا راحة', '24-48 ساعة', '1 أسبوع', '10 دقائق'],
+        a: 1,
+        hint: 'الاستشفاء العضلي'
+      },
+      {
+        q: 'ما هي أفضل طريقة للتحفيز المستمر؟',
+        opts: ['أهداف واقعية وتتبع التقدم', 'أهداف مستحيلة', 'عدم وضع أهداف', 'المقارنة بالآخرين فقط'],
+        a: 0,
+        hint: 'الواقعية مهمة'
+      },
+      {
+        q: 'ما هي أهمية الدهون الصحية في النظام الغذائي؟',
+        opts: ['يجب تجنبها تماماً', 'ضرورية للهرمونات والفيتامينات', 'فقط للتسمين', 'غير مهمة'],
+        a: 1,
+        hint: 'دهون مفيدة موجودة'
+      }
+    ];
+
+    let gameState = {
+      difficulty: 'medium',
+      currentQuestion: 0,
+      answers: [],
+      timeLeft: 20,
+      timerId: null,
+      timerPaused: false,
+      totalQuestions: QUESTIONS.length,
+      bestScore: localStorage.getItem('bestScore') || 0
+    };
+
+    function init() {
+      document.getElementById('totalQuestions').textContent = gameState.totalQuestions;
+      document.getElementById('bestScore').textContent = gameState.bestScore || '-';
+      
+      document.querySelectorAll('.difficulty-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.difficulty-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          gameState.difficulty = card.dataset.difficulty;
+        });
+      });
+
+      document.getElementById('startBtn').addEventListener('click', startQuiz);
+    }
+
+    function startQuiz() {
+      gameState.currentQuestion = 0;
+      gameState.answers = [];
+      gameState.timeLeft = DIFFICULTIES[gameState.difficulty].time;
+      gameState.timerPaused = false;
+      
+      document.getElementById('difficultyScreen').classList.add('hidden');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (gameState.currentQuestion >= QUESTIONS.length) {
+        showResults();
+        return;
+      }
+
+      const question = QUESTIONS[gameState.currentQuestion];
+      const config = DIFFICULTIES[gameState.difficulty];
+      gameState.timeLeft = config.time;
+      gameState.timerPaused = false;
+
+      const quizScreen = document.getElementById('quizScreen');
+      quizScreen.classList.remove('hidden');
+
+      quizScreen.innerHTML = `
+        <div class="quiz-header">
+          <div class="question-counter">
+            السؤال ${gameState.currentQuestion + 1} من ${QUESTIONS.length}
+          </div>
+          <div class="timer-container">
+            <div class="timer-icon">⏱️</div>
+            <div class="timer-bar">
+              <div class="timer-fill" id="timerFill"></div>
+            </div>
+            <div class="timer-text" id="timerText">${gameState.timeLeft}ث</div>
+            <button class="pause-btn" id="pauseBtn" title="إيقاف/تشغيل المؤقت">
+              <span id="pauseIcon">⏸️</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <div class="question-text">${question.q}</div>
+          ${question.hint ? `<div class="hint-badge">💡 تلميح: ${question.hint}</div>` : ''}
+        </div>
+
+        <div class="options-grid" id="optionsGrid">
+          ${question.opts.map((opt, i) => `
+            <button class="option-btn" data-index="${i}">
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+
+        <button class="skip-btn" id="skipBtn">⏭️ تخطي السؤال</button>
+      `;
+
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleAnswer(parseInt(btn.dataset.index)));
+      });
+
+      document.getElementById('skipBtn').addEventListener('click', () => handleAnswer(-1));
+      
+      document.getElementById('pauseBtn').addEventListener('click', toggleTimer);
+
+      startTimer();
+    }
+
+    function startTimer() {
+      const config = DIFFICULTIES[gameState.difficulty];
+      const maxTime = config.time;
+
+      updateTimer();
+
+      gameState.timerId = setInterval(() => {
+        if (!gameState.timerPaused) {
+          gameState.timeLeft--;
+          updateTimer();
+
+          if (gameState.timeLeft <= 0) {
+            clearInterval(gameState.timerId);
+            handleAnswer(-1, true);
+          }
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      gameState.timerPaused = !gameState.timerPaused;
+      
+      const pauseBtn = document.getElementById('pauseBtn');
+      const pauseIcon = document.getElementById('pauseIcon');
+      
+      if (gameState.timerPaused) {
+        pauseBtn.classList.add('paused');
+        pauseIcon.textContent = '▶️';
+        pauseBtn.title = 'تشغيل المؤقت';
+      } else {
+        pauseBtn.classList.remove('paused');
+        pauseIcon.textContent = '⏸️';
+        pauseBtn.title = 'إيقاف المؤقت';
+      }
+    }
+
+    function updateTimer() {
+      const config = DIFFICULTIES[gameState.difficulty];
+      const maxTime = config.time;
+      const timerFill = document.getElementById('timerFill');
+      const timerText = document.getElementById('timerText');
+
+      if (timerFill && timerText) {
+        const percentage = (gameState.timeLeft / maxTime) * 100;
+        timerFill.style.width = percentage + '%';
+        timerText.textContent = gameState.timeLeft + 'ث';
+
+        if (gameState.timeLeft <= 5) {
+          timerFill.classList.add('warning');
+        }
+      }
+    }
+
+    function handleAnswer(selectedIndex, timeout = false) {
+      clearInterval(gameState.timerId);
+
+      const question = QUESTIONS[gameState.currentQuestion];
+      const isCorrect = selectedIndex === question.a;
+
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.disabled = true;
+      });
+
+      if (selectedIndex >= 0) {
+        const selectedBtn = document.querySelector(`.option-btn[data-index="${selectedIndex}"]`);
+        if (selectedBtn) {
+          selectedBtn.classList.add(isCorrect ? 'correct' : 'wrong');
+        }
+      }
+
+      const correctBtn = document.querySelector(`.option-btn[data-index="${question.a}"]`);
+      if (correctBtn) {
+        correctBtn.classList.add('correct');
+      }
+
+      gameState.answers.push({
+        questionIndex: gameState.currentQuestion,
+        selectedIndex: selectedIndex,
+        correct: isCorrect,
+        timeout: timeout
+      });
+
+      setTimeout(() => {
+        gameState.currentQuestion++;
+        showQuestion();
+      }, 1500);
+    }
+
+    function showResults() {
+      clearInterval(gameState.timerId);
+
+      const correctAnswers = gameState.answers.filter(a => a.correct).length;
+      const wrongAnswers = gameState.answers.filter(a => !a.correct).length;
+      const skipped = gameState.answers.filter(a => a.selectedIndex === -1 && !a.timeout).length;
+      const timeouts = gameState.answers.filter(a => a.timeout).length;
+      const accuracy = Math.round((correctAnswers / QUESTIONS.length) * 100);
+      const score = correctAnswers * 10;
+
+      if (score > gameState.bestScore) {
+        gameState.bestScore = score;
+        localStorage.setItem('bestScore', score);
+      }
+
+      let resultIcon = '🎉';
+      let resultTitle = 'ممتاز!';
+      let resultMessage = '';
+
+      if (accuracy >= 90) {
+        resultIcon = '🏆';
+        resultTitle = 'مثالي!';
+        resultMessage = 'معلوماتك عن الصحة واللياقة رائعة! أنت خبير حقيقي في هذا المجال. استمر في هذا النهج الصحي!';
+      } else if (accuracy >= 70) {
+        resultIcon = '⭐';
+        resultTitle = 'رائع!';
+        resultMessage = 'لديك معرفة جيدة جداً بأساسيات الصحة واللياقة. مع القليل من التحسين ستصبح خبيراً!';
+      } else if (accuracy >= 50) {
+        resultIcon = '👍';
+        resultTitle = 'جيد!';
+        resultMessage = 'لديك أساس جيد، لكن هناك مجال للتحسين. راجع الإجابات الخاطئة وتعلم منها.';
+      } else {
+        resultIcon = '📚';
+        resultTitle = 'يحتاج تحسين';
+        resultMessage = 'لا بأس! الجميع يبدأ من مكان ما. اقرأ أكثر عن الصحة واللياقة وأعد المحاولة.';
+      }
+
+      document.getElementById('quizScreen').classList.add('hidden');
+      const resultsScreen = document.getElementById('resultsScreen');
+      resultsScreen.classList.remove('hidden');
+
+      resultsScreen.innerHTML = `
+        <div class="results-icon">${resultIcon}</div>
+        <h2 class="results-title">${resultTitle}</h2>
+        <div class="results-score">${score} نقطة</div>
+        
+        <div class="results-stats">
+          <div class="result-stat">
+            <div class="result-stat-value">${correctAnswers}</div>
+            <div class="result-stat-label">✅ إجابات صحيحة</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-value">${wrongAnswers}</div>
+            <div class="result-stat-label">❌ إجابات خاطئة</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-value">${accuracy}%</div>
+            <div class="result-stat-label">📊 نسبة النجاح</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-value">${DIFFICULTIES[gameState.difficulty].icon}</div>
+            <div class="result-stat-label">المستوى: ${DIFFICULTIES[gameState.difficulty].label}</div>
+          </div>
+        </div>
+
+        <div class="results-message">
+          ${resultMessage}
+        </div>
+
+        <div class="results-actions">
+          <button class="action-btn" onclick="restartQuiz()">
+            🔄 إعادة الاختبار
+          </button>
+          <button class="action-btn secondary" onclick="changeDifficulty()">
+            ⚙️ تغيير المستوى
+          </button>
+        </div>
+      `;
+    }
+
+    function restartQuiz() {
+      document.getElementById('resultsScreen').classList.add('hidden');
+      startQuiz();
+    }
+
+    function changeDifficulty() {
+      document.getElementById('resultsScreen').classList.add('hidden');
+      document.getElementById('difficultyScreen').classList.remove('hidden');
+    }
+
+    init();
+  </script>
+</body>
+</html>

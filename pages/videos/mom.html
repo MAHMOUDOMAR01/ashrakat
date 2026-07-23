@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم الأم - منصة التعلم التفاعلي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8A8A 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .page-title {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .scene-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+            outline: none;
+        }
+        
+        .scene-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .scene-card:focus-visible {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6), 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+        
+        .scene-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #FF6B6B, #FF8A8A);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .scene-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .scene-thumbnail {
+            height: 200px;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8A8A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ألوان مميزة لكل بطاقة لتمييز المشاهد بصرياً */
+        .scenes-grid .scene-card:nth-child(1) .scene-thumbnail {
+            background: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
+        }
+        .scenes-grid .scene-card:nth-child(2) .scene-thumbnail {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .scenes-grid .scene-card:nth-child(3) .scene-thumbnail {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .scenes-grid .scene-card:nth-child(4) .scene-thumbnail {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .scenes-grid .scene-card:nth-child(5) .scene-thumbnail {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        }
+        .scenes-grid .scene-card:nth-child(6) .scene-thumbnail {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+        }
+        
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .scene-card:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #FF6B6B;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .scene-content {
+            padding: 25px;
+        }
+        
+        .scene-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .scene-description {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .scene-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+            color: #888;
+        }
+        
+        .scene-duration {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .scene-number {
+            background: #FF6B6B;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .back-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border: 2px solid white;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            color: #2c3e50;
+            transform: translateY(-2px);
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .scenes-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .page-title {
+                font-size: 2em;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .scene-content {
+                padding: 20px;
+            }
+            
+            .scene-meta {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+
+        /* تقليل الحركة عند طلب المستخدم */
+        @media (prefers-reduced-motion: reduce) {
+            .scene-card,
+            .scene-card::before,
+            .play-button {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">👩 قسم الأم</div>
+            <div class="nav-links">
+                <a href="../main/home.html">🏠 الأقسام الرئيسية</a>
+                <a href="../videos/videos.html">🎥 قسم الفيديوهات</a>
+                <a href="../videos/child.html">🧒 قسم الطفل</a>
+                <a href="../feedback/feedback.html">📝 التقييم النهائي</a>
+            </div>
+        </nav>
+        
+        <div class="page-header">
+            <h1 class="page-title">
+                <span>👩</span>
+                <span>مشاهد قسم الأم</span>
+            </h1>
+            <p class="page-subtitle">
+                اختاري المشهد المناسب واستمتعي بمحتوى تعليمي مفيد ومصمم خصيصاً للأمهات
+            </p>
+        </div>
+        
+        <div class="scenes-grid">
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='mom-scene1.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    🎬
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد الأول</h3>
+                    <p class="scene-description">
+                        مقدمة شاملة حول أساسيات التربية الحديثة ونصائح عملية للتعامل مع الأطفال في المراحل المختلفة
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>⏱️</span>
+                            <span>8 دقائق</span>
+                        </div>
+                        <div class="scene-number">مشهد 1</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='mom-scene2.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    🎭
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد الثاني</h3>
+                    <p class="scene-description">
+                        كيفية التواصل الفعال مع الأطفال وبناء علاقة قوية معهم من خلال الحوار والاستماع
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>⏱️</span>
+                            <span>6 دقائق</span>
+                        </div>
+                        <div class="scene-number">مشهد 2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='mom-scene3.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    📚
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد الثالث</h3>
+                    <p class="scene-description">
+                        أهمية القراءة في تنمية قدرات الطفل وطرق تشجيع الأطفال على حب القراءة والتعلم
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>⏱️</span>
+                            <span>5 دقائق</span>
+                        </div>
+                        <div class="scene-number">مشهد 3</div>
+                    </div>
+                </div>
+        </div>
+
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='mom-scene4.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    🎨
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد الرابع</h3>
+                    <p class="scene-description">
+                        تنمية الإبداع عند الأطفال من خلال الأنشطة الفنية والألعاب التعليمية المبتكرة
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>⏱️</span>
+                            <span>7 دقائق</span>
+                        </div>
+                        <div class="scene-number">مشهد 4</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='mom-scene5.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    🎥
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد الخامس</h3>
+                    <p class="scene-description">
+                        خلاصة عملية وتطبيقات يومية لبناء عادات صحية مستدامة للأسرة
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>⏱️</span>
+                            <span>7 دقائق</span>
+                        </div>
+                        <div class="scene-number">مشهد 5</div>
+                    </div>
+                </div>
+            </div>
+            <!-- المشهد السادس: ملف PDF عن النظام الغذائي -->
+            <div class="scene-card" role="link" tabindex="0" onclick="window.location.href='diet-pdf.html'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                <div class="scene-thumbnail">
+                    📄
+                    <div class="play-overlay">
+                        <button class="play-button">▶</button>
+                    </div>
+                </div>
+                <div class="scene-content">
+                    <h3 class="scene-title">المشهد السادس</h3>
+                    <p class="scene-description">
+                        ملف PDF شامل عن النظام الغذائي الصحي للأطفال: إرشادات عملية، الحصص اليومية الموصى بها، ونصائح لتنظيم الوجبات للأسرة.
+                    </p>
+                    <div class="scene-meta">
+                        <div class="scene-duration">
+                            <span>📄</span>
+                            <span>ملف PDF</span>
+                        </div>
+                        <div class="scene-number">مشهد 6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="back-section">
+            <h3 style="color: white; margin-bottom: 15px;">🎯 استكشفي المزيد</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px;">
+                لا تترددي في زيارة الأقسام الأخرى للحصول على تجربة تعليمية شاملة
+            </p>
+            <a href="../videos/videos.html" class="back-btn">🎥 قسم الفيديوهات</a>
+            <a href="../child/child.html" class="back-btn">🧒 قسم الطفل</a>
+            <a href="../main/home.html" class="back-btn">🏠 الأقسام الرئيسية</a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.scene-card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                // تأثير التمرير
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

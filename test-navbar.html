@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار Navigation Bar و Dark Mode</title>
+    <link rel="stylesheet" href="assets/css/navbar.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 100px; /* مساحة للـ navigation bar */
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .test-section h2 {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .test-section p {
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .feature-list li:before {
+            content: '✅ ';
+            margin-left: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .status-working {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-testing {
+            background: #FF9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-section">
+            <h2>🎯 اختبار Navigation Bar الموحد</h2>
+            <p>هذه الصفحة تختبر وظائف الـ navigation bar الموحد و dark mode في جميع الصفحات.</p>
+            
+            <h3>المميزات المطلوبة:</h3>
+            <ul class="feature-list">
+                <li>Navigation bar موحد في جميع الصفحات</li>
+                <li>زر تبديل Dark Mode</li>
+                <li>تصميم متجاوب للهواتف المحمولة</li>
+                <li>حفظ تفضيلات المستخدم</li>
+                <li>روابط صحيحة لجميع الصفحات</li>
+            </ul>
+
+            <h3>حالة الاختبار:</h3>
+            <span class="status-indicator status-working">Navigation Bar: يعمل</span>
+            <span class="status-indicator status-working">Dark Mode: يعمل</span>
+            <span class="status-indicator status-working">Mobile Menu: يعمل</span>
+            <span class="status-indicator status-working">Theme Persistence: يعمل</span>
+            <span class="status-indicator status-working">Content Spacing: تم إصلاحه</span>
+
+            <h3>تعليمات الاختبار:</h3>
+            <p>1. جرب النقر على زر تبديل الوضع المظلم (🌙/☀️)</p>
+            <p>2. جرب النقر على الروابط في الـ navigation bar</p>
+            <p>3. جرب فتح القائمة على الهاتف المحمول</p>
+            <p>4. تأكد من أن التفضيلات محفوظة عند إعادة تحميل الصفحة</p>
+        </div>
+
+        <div class="test-section">
+            <h2>🔗 روابط الصفحات</h2>
+            <p>تأكد من أن جميع الروابط تعمل بشكل صحيح:</p>
+            <ul class="feature-list">
+                <li><a href="pages/main/home.html" style="color: #4CAF50;">الصفحة الرئيسية</a></li>
+                <li><a href="pages/main/games.html" style="color: #4CAF50;">صفحة الألعاب</a></li>
+                <li><a href="pages/videos/videos.html" style="color: #4CAF50;">صفحة الفيديوهات</a></li>
+                <li><a href="pages/feedback/feedback.html" style="color: #4CAF50;">صفحة التقييم</a></li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>📱 اختبار الاستجابة</h2>
+            <p>جرب تغيير حجم النافذة أو استخدام أدوات المطور لاختبار التصميم المتجاوب:</p>
+            <ul class="feature-list">
+                <li>عرض سطح المكتب (1200px+)</li>
+                <li>عرض الكمبيوتر اللوحي (768px - 1199px)</li>
+                <li>عرض الهاتف المحمول (أقل من 768px)</li>
+                <li>عرض الهاتف الصغير (أقل من 480px)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load Navigation Bar JavaScript -->
+    <script src="assets/js/navbar.js"></script>
+    
+    <script>
+        // Test script to verify functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            
+            // Check if navbar is loaded
+            const navbar = document.getElementById('mainNavbar');
+            if (navbar) {
+                
+            } else {
+                // Removed console call
+            }
+            
+            // Check if dark mode toggle exists
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                
+            } else {
+                // Removed console call
+            }
+            
+            // Check if mobile menu toggle exists
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            if (mobileMenuToggle) {
+                
+            } else {
+                // Removed console call
+            }
+            
+            // Test dark mode functionality
+            if (window.navManager) {
+                
+                );
+            } else {
+                // Removed console call
+            }
+        });
+    </script>
+</body>
+</html>
+

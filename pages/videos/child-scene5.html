@@ -1,0 +1,923 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقارنة الوجبات الصحية - قسم الطفل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8BC34A 0%, #4CAF50 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .video-header {
+            background: linear-gradient(135deg, #8BC34A 0%, #4CAF50 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="lunchbox" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23lunchbox)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .video-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .video-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .floating-items {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .lunch-item {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.3;
+            animation: floatItem 6s ease-in-out infinite;
+        }
+
+        .lunch-item:nth-child(1) { top: 20%; right: 10%; animation-delay: 0s; }
+        .lunch-item:nth-child(2) { top: 60%; right: 80%; animation-delay: 1s; }
+        .lunch-item:nth-child(3) { top: 80%; right: 30%; animation-delay: 2s; }
+        .lunch-item:nth-child(4) { top: 30%; right: 70%; animation-delay: 3s; }
+
+        .video-container {
+            position: relative;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .video-description {
+            padding: 30px;
+            background: white;
+        }
+
+        .description-title {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .description-content {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .lunchbox-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .lunchbox-card {
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .healthy-box {
+            background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+            border: 3px solid #4CAF50;
+        }
+
+        .unhealthy-box {
+            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+            border: 3px solid #f44336;
+        }
+
+        .lunchbox-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .healthy-box .lunchbox-header {
+            color: #2E7D32;
+        }
+
+        .unhealthy-box .lunchbox-header {
+            color: #d32f2f;
+        }
+
+        .food-items {
+            display: grid;
+            gap: 15px;
+        }
+
+        .food-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .food-emoji {
+            font-size: 2.5em;
+        }
+
+        .food-info {
+            flex: 1;
+        }
+
+        .food-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .food-benefits {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .concept-explanation {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border: 2px solid #2196F3;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .concept-explanation h3 {
+            color: #1565C0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3em;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .concept-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .concept-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .concept-title {
+            font-weight: bold;
+            color: #1565C0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .concept-desc {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        .sports-section {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+            border: 2px solid #FFA726;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .sports-section h3 {
+            color: #E65100;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3em;
+        }
+
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .sport-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sport-item:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sport-emoji {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .sport-name {
+            color: #E65100;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .dialogue-section {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            border: 2px solid #AB47BC;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dialogue-section h3 {
+            color: #6A1B9A;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3em;
+        }
+
+        .dialogue-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-right: 60px;
+        }
+
+        .dialogue-character {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 2em;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #6A1B9A;
+            margin-bottom: 5px;
+        }
+
+        .character-speech {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #8BC34A, #4CAF50);
+            width: 66.7%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        .navigation-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #8BC34A, #4CAF50);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 195, 74, 0.3);
+        }
+
+        .scene-info {
+            text-align: center;
+            color: #666;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes floatItem {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(139, 195, 74, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(139, 195, 74, 0.6); }
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                padding: 20px;
+            }
+
+            .video-placeholder {
+                height: 300px;
+            }
+
+            .video-title {
+                font-size: 1.5em;
+            }
+
+            .lunchbox-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sports-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navigation-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">🍱 مقارنة الوجبات الصحية - قسم الطفل</div>
+            <div class="nav-links">
+                <a href="child.html">🔙 قائمة المشاهد</a>
+                <a href="../videos/videos.html">🎥 قسم الفيديوهات</a>
+                <a href="../main/home.html">🏠 الرئيسية</a>
+            </div>
+        </nav>
+
+        <div class="video-section">
+            <div class="video-header">
+                <div class="floating-items">
+                    <div class="lunch-item">🍱</div>
+                    <div class="lunch-item">🍎</div>
+                    <div class="lunch-item">🥑</div>
+                    <div class="lunch-item">🏃‍♂️</div>
+                </div>
+                <h1 class="video-title">🍱 المشهد الخامس - مقارنة الوجبات الصحية</h1>
+                <p class="video-subtitle">محمد ويونس يقارنان بين وجباتهما ويتعلمان عن الألياف والسعرات الحرارية والرياضة!</p>
+            </div>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <!-- يتم استبدال src بالرابط الفعلي للفيديو -->
+                    <iframe class="video-iframe" 
+                            src="https://drive.google.com/file/d/1NHZLAomI1cbEvGoDSkPJ7mV0zyPBrp7R/preview"
+                            allow="autoplay">
+                    </iframe>
+                    <div class="video-loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري تحميل فيديو مقارنة الوجبات...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-description">
+                <h2 class="description-title">
+                    <span>🍱</span>
+                    مقارنة رائعة بين الوجبات الصحية وغير الصحية!
+                </h2>
+                <p class="description-content">
+                    في هذا المشهد التعليمي المميز، يحمل محمد ويونس صندوقي طعام مختلفين تماماً. محمد يحمل وجبة صحية مليئة بالفواكه الطازجة والأفوكادو والزبادي الطبيعي، بينما يونس يحمل وجبة غير صحية تحتوي على البطاطس المقلية والبرجر والكولا. من خلال حوارهما، نتعلم عن الألياف وفوائدها، السعرات الحرارية ومعناها، وأهمية الرياضة المتنوعة.
+                </p>
+
+                <div class="lunchbox-comparison">
+                    <div class="lunchbox-card healthy-box">
+                        <div class="lunchbox-header">
+                            <span>🍱</span>
+                            صندوق طعام محمد الصحي
+                        </div>
+                        <div class="food-items">
+                            <div class="food-item">
+                                <span class="food-emoji">🍎</span>
+                                <div class="food-info">
+                                    <div class="food-name">قطع التفاح الطازجة</div>
+                                    <div class="food-benefits">غنية بالفيتامينات والألياف المفيدة للهضم والشبع الصحي</div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <span class="food-emoji">🥑</span>
+                                <div class="food-info">
+                                    <div class="food-name">الأفوكادو</div>
+                                    <div class="food-benefits">يحتوي على دهون صحية مفيدة لنمو الدماغ والجسم</div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <span class="food-emoji">🥛</span>
+                                <div class="food-info">
+                                    <div class="food-name">الزبادي الطبيعي</div>
+                                    <div class="food-benefits">مصنوع من اللبن، غني بالبروتين والكالسيوم لعظام قوية</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lunchbox-card unhealthy-box">
+                        <div class="lunchbox-header">
+                            <span>🍱</span>
+                            صندوق طعام يونس غير الصحي
+                        </div>
+                        <div class="food-items">
+                            <div class="food-item">
+                                <span class="food-emoji">🍟</span>
+                                <div class="food-info">
+                                    <div class="food-name">البطاطس المقلية</div>
+                                    <div class="food-benefits">مقلية في الزيت أكثر من مرة، تحتوي على دهون ضارة ومواد مسرطنة</div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <span class="food-emoji">🍔</span>
+                                <div class="food-info">
+                                    <div class="food-name">ساندوتش البرجر</div>
+                                    <div class="food-benefits">خبز أبيض ولحم مصنع، سعرات حرارية عالية بدون قيمة غذائية</div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <span class="food-emoji">🥤</span>
+                                <div class="food-info">
+                                    <div class="food-name">الكوكاكولا</div>
+                                    <div class="food-benefits">مشروب سكري يسبب تراكم الدهون وتسوس الأسنان</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-explanation">
+                    <h3>
+                        <span>🧠</span>
+                        المفاهيم المهمة التي تعلمناها
+                    </h3>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <div class="concept-icon">🌾</div>
+                            <div class="concept-title">الألياف الغذائية</div>
+                            <div class="concept-desc">مادة في الغذاء غير قابلة للهضم، تساعد على الشبع بسرعة وتمنع تراكم الدهون</div>
+                        </div>
+                        <div class="concept-card">
+                            <div class="concept-icon">🔥</div>
+                            <div class="concept-title">السعرات الحرارية</div>
+                            <div class="concept-desc">وحدة قياس الطاقة في الجسم، نستخدمها في كل نشاط مثل التفكير والمشي والكلام</div>
+                        </div>
+                        <div class="concept-card">
+                            <div class="concept-icon">🌾</div>
+                            <div class="concept-title">الحبوب الكاملة</div>
+                            <div class="concept-desc">القمح والشوفان الكامل أكثر فائدة من الخبز الأبيض لاحتوائها على الألياف</div>
+                        </div>
+                        <div class="concept-card">
+                            <div class="concept-icon">🍳</div>
+                            <div class="concept-title">طرق الطبخ الصحية</div>
+                            <div class="concept-desc">السلق والطبخ بزيت أقل أفضل من القلي المتكرر في الزيت</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sports-section">
+                    <h3>
+                        <span>🏃‍♂️</span>
+                        أنواع الرياضة المتنوعة (أكثر من مجرد المشي!)
+                    </h3>
+                    <div class="sports-grid">
+                        <div class="sport-item">
+                            <span class="sport-emoji">🚴‍♂️</span>
+                            <div class="sport-name">ركوب الدراجة</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🏊‍♂️</span>
+                            <div class="sport-name">السباحة</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🏃‍♂️</span>
+                            <div class="sport-name">الهرولة</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🤸‍♂️</span>
+                            <div class="sport-name">قفز الحواجز</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🚣‍♂️</span>
+                            <div class="sport-name">التجديف</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🥾</span>
+                            <div class="sport-name">المشي لمسافات طويلة</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">🎾</span>
+                            <div class="sport-name">لعب التنس</div>
+                        </div>
+                        <div class="sport-item">
+                            <span class="sport-emoji">⏰</span>
+                            <div class="sport-name">رياضة متواصلة بدون استراحة</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 20px; color: #E65100; font-weight: bold;">
+                        💡 الرياضة ليست فقط لإنقاص الوزن - ستتعلم فوائدها الأخرى في المشهد القادم!
+                    </p>
+                </div>
+
+                <div class="dialogue-section">
+                    <h3>
+                        <span>💬</span>
+                        أهم أجزاء الحوار التعليمي
+                    </h3>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">التفاح فيه فيتامينات وألياف والأفوكادو فيه دهون مفيدة للجسم والزبادي مفيد عشان معمول من اللبن</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👨‍🦱</div>
+                        <div class="character-name">يونس:</div>
+                        <div class="character-speech">إيه هي الألياف وإيه فايدتها؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">الألياف مادة في الغذاء غير قابلة للهضم وهي مفيدة إنها بتخليني أحس بالشبع بسرعة ومش بتخلي الدهون تتراكم في الجسم بسرعة</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👨‍🦱</div>
+                        <div class="character-name">يونس:</div>
+                        <div class="character-speech">مفهمتش يعني إيه سعرات حرارية؟</div>
+                    </div>
+                    <div class="dialogue-item">
+                        <div class="dialogue-character">👦</div>
+                        <div class="character-name">محمد:</div>
+                        <div class="character-speech">هي وحدة بنقيس بيها الطاقة في الجسم زي المتر والكيلوغرام، والطاقة دي هي اللي بنستخدمها في أي نشاط الجسم بيقوم بيه - زي التفكير والمشي والضحك والكلام</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9em;">
+                    المشهد 5 من 9 | التقدم: 66.7% 🌟
+                </p>
+            </div>
+
+            <div class="navigation-section">
+                <a href="child-scene4.html" class="nav-btn">
+                    <span>⏮️</span>
+                    المشهد السابق
+                </a>
+                <div class="scene-info">
+                    <strong>🍱 المشهد الحالي: مقارنة الوجبات الصحية</strong>
+                    <br>
+                    <small>مدة المشاهدة: 10 دقائق من التعلم التفاعلي المفيد!</small>
+                </div>
+                <a href="child-scene6.html" class="nav-btn">
+                    <span>المشهد التالي</span>
+                    <span>⏭️</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoIframe = document.querySelector('.video-iframe');
+            const loadingDiv = document.querySelector('.video-loading');
+
+            // إخفاء مؤشر التحميل عند تحميل الفيديو
+            videoIframe.addEventListener('load', function() {
+                loadingDiv.style.display = 'none';
+            });
+
+            // تتبع وقت المشاهدة
+            let watchTime = 0;
+            const watchInterval = setInterval(() => {
+                watchTime += 1;
+                
+            }, 1000);
+
+            // إيقاف التتبع عند مغادرة الصفحة
+            window.addEventListener('beforeunload', function() {
+                clearInterval(watchInterval);
+                
+            });
+
+            // تأثيرات تفاعلية للرياضات
+            document.querySelectorAll('.sport-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.1)';
+                    this.style.background = 'rgba(255, 255, 255, 0.95)';
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.background = 'rgba(255, 255, 255, 0.8)';
+                });
+
+                item.addEventListener('click', function() {
+                    this.style.animation = 'sportBounce 0.6s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 600);
+                });
+            });
+
+            // تأثيرات تفاعلية لصناديق الطعام
+            document.querySelectorAll('.lunchbox-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.15)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // تأثيرات للمفاهيم
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.animation = 'conceptGlow 0.8s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 800);
+                });
+            });
+
+            // تأثيرات الحوار
+            document.querySelectorAll('.dialogue-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.animation = 'dialoguePulse 0.6s ease';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 600);
+                });
+            });
+
+            // إضافة عناصر الطعام المتحركة
+            createLunchBoxItems();
+        });
+
+        function createLunchBoxItems() {
+            const lunchItems = ['🍎', '🥑', '🥛', '🍱', '🥗', '🌾', '🔥', '💪'];
+            
+            setInterval(() => {
+                if (Math.random() < 0.25) {
+                    const item = document.createElement('div');
+                    const lunchItem = lunchItems[Math.floor(Math.random() * lunchItems.length)];
+                    
+                    item.style.cssText = `
+                        position: fixed;
+                        font-size: ${Math.random() * 30 + 25}px;
+                        pointer-events: none;
+                        top: ${Math.random() * 100}vh;
+                        right: ${Math.random() * 100}vw;
+                        opacity: 0.6;
+                        animation: lunchFloat 6s ease-out forwards;
+                        z-index: 1000;
+                    `;
+                    item.textContent = lunchItem;
+                    
+                    document.body.appendChild(item);
+                    
+                    setTimeout(() => {
+                        item.remove();
+                    }, 6000);
+                }
+            }, 4000);
+        }
+
+        // إضافة الرسوم المتحركة
+        const lunchStyle = document.createElement('style');
+        lunchStyle.textContent = `
+            @keyframes lunchFloat {
+                0% { 
+                    transform: translateY(0) rotate(0deg) scale(1); 
+                    opacity: 0.6; 
+                }
+                50% { 
+                    transform: translateY(-40px) rotate(180deg) scale(1.3); 
+                    opacity: 0.9; 
+                }
+                100% { 
+                    transform: translateY(-80px) rotate(360deg) scale(0); 
+                    opacity: 0; 
+                }
+            }
+            
+            @keyframes sportBounce {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.15); }
+            }
+            
+            @keyframes conceptGlow {
+                0%, 100% { 
+                    background: rgba(255, 255, 255, 0.9); 
+                    transform: scale(1); 
+                }
+                50% { 
+                    background: rgba(255, 255, 255, 1); 
+                    transform: scale(1.05); 
+                    box-shadow: 0 0 20px rgba(21, 101, 192, 0.3); 
+                }
+            }
+            
+            @keyframes dialoguePulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+            }
+        `;
+        document.head.appendChild(lunchStyle);
+    </script>
+</body>
+</html>
